@@ -1,0 +1,9 @@
+*.cdt
+*.sna
+*.dsk
+obj/
+redist
+tmp
+bin
+out
+python
