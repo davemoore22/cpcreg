@@ -1,14 +1,10 @@
-# Transversion
+# Reginald and the She Vampires
 
-An Amstrad CPC Remake of the classic ZX Spectrum Game "Tranversion"
-by Dave Moore (c) 2024
+An Amstrad CPC Remake/reboot of, and sequel to the 1987 game "Mr Weems and the She Vampires" by Dave Moore (c) 2025.
 
-Coded in C using the fantastic [CPCTelera library](https://lronaldo.github.io/cpctelera/), and the awesome [Arkos Tracker 2](https://www.julien-nevo.com/arkostracker/). Works on all CPC models.
+December 2025 Beta Version!
 
-Music/SFX by Targhan (used by kind permission).
+https://typhonsoft.itch.io/reginald
 
-![](/promo/1.png)
-![](/promo/6.png)
-![](/promo/9.png)
-![](/promo/3.png)
+Source code released under the GPL.
 
