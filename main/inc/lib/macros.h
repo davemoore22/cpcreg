@@ -74,4 +74,7 @@
 #define IS_WALKABLE_FG(fg) \
     ((fg)==0 || IS_SMASHED_SARCOGRAPHUS(fg) || IS_ITEM(fg))
 
+
+#define IS_BOSS(x) ((x) >= BOSS_START && (x) <= BOSS_END)
+
 // clang-format oN

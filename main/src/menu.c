@@ -102,7 +102,7 @@ void menu_draw_centre(void) {
 
 	v_pen = PEN_2;
 	video_print_centred_text(
-		"December 2025 Beta #2", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
+		"December 2025 Beta #3", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_1;
 	u8 *pg_ptr = (u8 *)0xA601;
@@ -264,8 +264,8 @@ cpct_keyID menu_poll_input(void) {
 		return Key_3;
 	if (cpct_isKeyPressed(Key_4))
 		return Key_4;
-	if (cpct_isKeyPressed(Key_Tab))
-		return Key_Tab;
+	// if (cpct_isKeyPressed(Key_Tab))
+	//	return Key_Tab;
 	if (cpct_isKeyPressed(Key_9))
 		return Key_9;
 

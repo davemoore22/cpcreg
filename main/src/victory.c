@@ -241,7 +241,7 @@ static void victory_do_return(void) {
 	video_print_centred_text("IF HE CAN BE CAUGHT!", 12 * LINE_P_H);
 	victory_wait_or_kp();
 	v_pen = 3;
-	video_print_centred_text("KEEP AND EYE OUT FOR:", 15 * LINE_P_H);
+	video_print_centred_text("KEEP AN EYE OUT FOR:", 15 * LINE_P_H);
 	video_print_centred_text(
 		"WEEMS 3: REGINA AND THE UNDEAD HIMBOS!", 17 * LINE_P_H);
 	victory_wait_or_kp();

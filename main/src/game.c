@@ -44,6 +44,8 @@ bullet_t g_bullet;
 
 static const u8 (*g_palette)[4];
 
+bool g_completed = false;
+
 /* Working Screen */
 u8 temp_bg[SCREEN_U_W * SCREEN_U_H];
 
@@ -169,6 +171,9 @@ u32 game_start(void) {
 			if (next > MAX_LEVEL) {
 
 				/* No more level go to end game for now */
+				victory_start();
+				victory_stop();
+
 				game_over = true;
 			} else {
 
@@ -567,7 +572,11 @@ static bool game_play_level(void) {
 	} else if (g_game.level == 6) {
 		game_reset_player(3, DIR_EAST, 10, 2);
 		game_load_bg_for_screen(3);
+		// game_reset_player(2, DIR_EAST, 12, 2);
+		// game_load_bg_for_screen(2);
 	}
+
+	g_completed = false;
 
 	/* Load GUI from disk */
 	video_draw_GUI();
@@ -618,6 +627,8 @@ static bool game_play_level(void) {
 
 		/* Player movement & doors & firing */
 		game_do_player(&input, &events);
+		if (g_completed)
+			status |= BIT_SUCCESS;
 
 		/* Bullet movement */
 		if (g_bullet.active)
@@ -1276,6 +1287,45 @@ static bool game_handle_tile_on_entry(
 		events->redraw_hud = true;
 
 		return false; /* Still blocks movement */
+	}
+
+	/* Boss! */
+	if (IS_BOSS(fg)) {
+
+		/* Fixed Position on Screen */
+		video_flash_border_triplet(TRIPLET_RED);
+
+		for (u8 gy = 0; gy < SCREEN_U_H; gy++) {
+			for (u8 gx = 0; gx < SCREEN_U_W; gx++) {
+
+				u16 idx = utils_get_screen_x_y(
+					g_player.screen, gx, gy);
+				u8 tile = g_level_fg[idx];
+
+				if (IS_BOSS(tile)) {
+
+					g_level_fg[idx] =
+						tile + 3; /* Turn into body */
+
+					video_mark_dirty_tile(gx, gy);
+				}
+			}
+
+			video_draw_dirty_tiles();
+
+			bool kp = false;
+			while ((!kp) && (g_clock.s < 10)) {
+
+				cpct_waitVSYNC();
+				utils_clock_tick();
+				if (cpct_isAnyKeyPressed())
+					kp = true;
+			}
+
+			cpct_setBorder(HW_BLACK);
+
+			g_completed = true;
+		}
 	}
 
 	if (IS_PHYLACTERY(fg)) {

@@ -184,6 +184,9 @@
 #define MAX_MONSTERS 8
 #define MONSTER_CONTACT_DAMAGE 100
 
+#define BOSS_START 29
+#define BOSS_END 31
+
 /* Level Screen Count */
 #define LEVEL_SCRS 12
 
