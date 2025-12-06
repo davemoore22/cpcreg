@@ -90,15 +90,15 @@ void start(void) {
 				redraw = false;
 			}
 
-			// if (key == Key_Tab) {
-			//	menu_stop();
-			//	victory_start();
-			//	victory_stop();
-			//
-			//	menu_draw_from_disc(true);
-			//		menu_start();
-			//	redraw = false;
-			// }
+			if (key == Key_Tab && g_options & OPT_CHEAT) {
+				menu_stop();
+				victory_start();
+				victory_stop();
+
+				menu_draw_from_disc(true);
+				menu_start();
+				redraw = false;
+			}
 
 			if (!quit && redraw)
 				menu_draw_from_disc(false);

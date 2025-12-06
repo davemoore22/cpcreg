@@ -20,23 +20,45 @@
 
 #include "victory.h"
 
+/* Globals */
+static u16 last_x[2] = {0, 0};
+static u8 last_valid[2] = {0, 0};
+
+static const u8 palette_1[4] = {
+	HW_BLACK,
+	HW_RED,
+	HW_PURPLE,
+	HW_BRIGHT_WHITE,
+};
+static const u8 palette_2[4] = {
+	HW_BLACK,
+	HW_RED,
+	HW_BRIGHT_RED,
+	HW_PASTEL_YELLOW,
+};
+
+static u8 v_animation_frame;
+
 /* Private Functions */
 static void victory_draw(void);
 static void victory_reset_colours(bool which);
 static void victory_interrupt(void);
 static void victory_fade_to_black(void);
 static void victory_wait_or_kp(void);
-
-static void eg_show_text(const char *s);
-static void eg_wait_ms(u16 ms);
-static void eg_draw_character(u8 id, u16 x, u8 y);
-static void eg_erase_character(u8 id);
-static void eg_clear_text(void);
+static void victory_show_text(const char *s);
+static void victory_wait_s(u8 s);
+static void victory_draw_character(u8 id, u16 x, u8 y);
+static void victory_erase_character(u8 id);
+static void victory_clear_text(void);
+static void victory_do_kill(void);
 static void victory_do_animation(void);
+static void victory_do_return(void);
+static void victory_do_uncle(void);
 static void victory_draw_weems_xor_sprite(const u8 *spr, u8 x, u8 y);
+static inline void victory_wait_n_vsync(u8 n);
 
-static const u8 *get_regina_frame(u8 idx);
-static const u8 *get_reginald_frame(u8 idx);
+static const u8 *victory_regina_frame(u8 idx);
+static const u8 *victory_reginald_frame(u8 idx);
 
 /* Character IDs */
 #define CHAR_WEEMS 0
@@ -44,9 +66,9 @@ static const u8 *get_reginald_frame(u8 idx);
 #define CHAR_REGINA 2
 
 /* Where on screen they walk (Mode 1, sprite height assumed) */
-#define WALK_Y 120 // adjust as needed
+#define WALK_Y 120
 #define LEFT_X 0
-#define RIGHT_X 74 // adjust for sprite width
+#define RIGHT_X 74
 
 /* Movement speed in pixels per frame */
 #define STEP 2
@@ -54,66 +76,16 @@ static const u8 *get_reginald_frame(u8 idx);
 /* Start the Victory Screen */
 void victory_start(void) {
 
-	/* Clear the Screen */
-	video_blank_screen();
-	video_clear_screen();
-
 	cpct_setInterruptHandler(victory_interrupt);
 	cpct_waitVSYNC();
 
 	victory_reset_colours(false);
 	video_reset_timers();
 
-	v_pen = 3;
-	video_print_centred_text(
-		"YOU HAVE FOUND THE DREAD VAMPIRESS!", 10 * LINE_P_H);
-	video_print_centred_text("SHE IS ASLEEP!", 12 * LINE_P_H);
-	victory_wait_or_kp();
-
-	video_print_centred_text(
-		"QUICKLY YOU SLAY HER BEFORE SHE WAKES!", 15 * LINE_P_H);
-	victory_wait_or_kp();
-
-	video_blank_screen();
-	video_clear_screen();
-
-	/* Draw Graphic */
-	g_clock_on = false;
-
-	victory_draw();
-	g_clock_on = true;
-
-	victory_reset_colours(true);
-	victory_wait_or_kp();
-
-	victory_fade_to_black();
-	video_clear_screen();
-	video_blank_screen();
-
-	victory_reset_colours(false);
-	video_print_centred_text("BUT WHERE IS YOUR UNCLE?", 10 * LINE_P_H);
-	video_print_centred_text("HE IS NOWHERE TO BE FOUND!", 12 * LINE_P_H);
-	victory_wait_or_kp();
-
-	v_pen = 2;
-	video_print_centred_text(
-		"SUDDENLY THERE IS A SCREAM FROM NEARBY!", 15 * LINE_P_H);
-	v_pen = 3;
-	victory_wait_or_kp();
-	video_clear_screen();
-
+	victory_do_kill();
+	victory_do_uncle();
 	victory_do_animation();
-	victory_wait_or_kp();
-	video_clear_screen();
-	video_print_centred_text(
-		"REGINALD AND REGINA WILL RETURN!", 11 * LINE_P_H);
-	victory_wait_or_kp();
-
-	v_pen = 2;
-	video_print_centred_text("AND SO WILL MR WEEMS!", 14 * LINE_P_H);
-	victory_wait_or_kp();
-	video_clear_screen();
-	video_blank_screen();
+	victory_do_return();
 }
 
 static void victory_wait_or_kp(void) {
@@ -151,24 +123,7 @@ void victory_stop(void) {
 
 static void victory_reset_colours(bool which) {
 
-	static const u8 palette_1[4] = {
-		HW_BLACK,
-		HW_RED,
-		HW_PURPLE,
-		HW_BRIGHT_WHITE,
-	};
-
-	static const u8 palette_2[4] = {
-		HW_BLACK,
-		HW_RED,
-		HW_BRIGHT_RED,
-		HW_PASTEL_YELLOW,
-	};
-
-	if (which)
-		cpct_setPalette(palette_1, sizeof(palette_1));
-	else
-		cpct_setPalette(palette_2, sizeof(palette_2));
+	cpct_setPalette(which ? palette_1 : palette_2, 4);
 }
 
 static void victory_draw(void) {
@@ -192,108 +147,196 @@ static void victory_interrupt(void) {
 	utils_clock_interrupt();
 }
 
-// --- Random-pixel fade-to-black for MODE 1 (16384 bytes) ---
+/* Random-pixel fade-to-black */
 static void victory_fade_to_black(void) {
 
 	u8 *vmem = (u8 *)CPCT_VMEM_START;
-	const u16 screen_bytes = 0x4000; // 16 KB
-
-	// Do ~10 random clears per byte for good measure
-	const u32 iterations = screen_bytes * 10UL;
+	const u16 screen_bytes = 0x4000;
+	const u32 iterations = screen_bytes * 6UL;
+	bool swap = false;
+	cpct_setBorder(HW_RED);
 
 	for (u32 i = 0; i < iterations; i++) {
 
 		u16 offset = cpct_getRandom_glfsr16_u16() & (screen_bytes - 1);
 		vmem[offset] = 0x00;
 
-		if ((i & 0x0FFF) == 0) // every ~4k iterations
+		if ((i & 0x0FFF) == 0) {
 			cpct_waitVSYNC();
+			swap = !swap;
+			if (swap) {
+				cpct_setBorder(HW_BRIGHT_RED);
+				cpct_setPALColour(3, HW_ORANGE);
+			} else {
+				cpct_setBorder(HW_ORANGE);
+				cpct_setPALColour(3, HW_BRIGHT_YELLOW);
+			}
+		}
 	}
+}
+
+static void victory_do_uncle(void) {
+
+	/* Clear the Screen */
+	video_blank_screen();
+	video_clear_screen();
+	victory_reset_colours(false);
+
+	video_print_centred_text("BUT WHERE IS YOUR UNCLE?", 10 * LINE_P_H);
+	video_print_centred_text("HE IS NOWHERE TO BE FOUND!", 12 * LINE_P_H);
+	victory_wait_or_kp();
+
+	v_pen = 2;
+	video_print_centred_text(
+		"SUDDENLY THERE IS A SCREAM FROM NEARBY!", 15 * LINE_P_H);
+	v_pen = 3;
+	victory_wait_or_kp();
+	video_clear_screen();
+}
+
+static void victory_do_kill(void) {
+
+	v_pen = 3;
+	video_print_centred_text(
+		"YOU HAVE FOUND THE DREAD VAMPIRESS!", 10 * LINE_P_H);
+	video_print_centred_text("SHE IS ASLEEP!", 12 * LINE_P_H);
+	victory_wait_or_kp();
+
+	video_print_centred_text(
+		"QUICKLY YOU SLAY HER BEFORE SHE WAKES!", 15 * LINE_P_H);
+	victory_wait_or_kp();
+
+	video_blank_screen();
+	video_clear_screen();
+
+	/* Draw Graphic */
+	g_clock_on = false;
+
+	cpct_removeInterruptHandler();
+	victory_draw();
+	cpct_setInterruptHandler(victory_interrupt);
+	g_clock_on = true;
+
+	victory_reset_colours(true);
+	victory_wait_or_kp();
+
+	cpct_setPALColour(2, HW_BRIGHT_RED);
+	cpct_setPALColour(3, HW_ORANGE);
+	victory_fade_to_black();
+	video_clear_screen();
+	video_blank_screen();
+}
+
+static void victory_do_return(void) {
+
+	video_clear_screen();
+	victory_reset_colours(false);
+	video_print_centred_text(
+		"REGINALD AND REGINA WILL RETURN!", 7 * LINE_P_H);
+	victory_wait_or_kp();
+
+	v_pen = 2;
+	video_print_centred_text("AND SO WILL MR WEEMS!", 10 * LINE_P_H);
+	victory_wait_or_kp();
+	video_print_centred_text("IF HE CAN BE CAUGHT!", 12 * LINE_P_H);
+	victory_wait_or_kp();
+	v_pen = 3;
+	video_print_centred_text("KEEP AND EYE OUT FOR:", 15 * LINE_P_H);
+	video_print_centred_text(
+		"WEEMS 3: REGINA AND THE UNDEAD HIMBOS!", 17 * LINE_P_H);
+	victory_wait_or_kp();
+	victory_wait_or_kp();
+	video_clear_screen();
+	video_blank_screen();
 }
 
 void victory_do_animation(void) {
 
 	/* Step 1: Mr Weems appears on the left */
 	u16 x = LEFT_X;
-	eg_draw_character(CHAR_WEEMS, x, WALK_Y);
+	v_animation_frame = 0;
+	victory_draw_character(CHAR_WEEMS, x, WALK_Y);
 
 	v_pen = PEN_2;
-	eg_show_text("AIEEEE!!!!! ARGHHHHH!!!!!");
-	eg_wait_ms(5000);
-	eg_clear_text();
+	victory_show_text("AIEEEE!!!!! ARGHHHHH!!!!!");
+	victory_wait_s(5);
+	victory_clear_text();
 
 	/* Step 2: Mr Weems runs to the right */
 	while (x < RIGHT_X) {
 		x += STEP;
-		eg_draw_character(CHAR_WEEMS, x, WALK_Y);
-		cpct_waitVSYNC();
-		cpct_waitVSYNC();
-		cpct_waitVSYNC();
+		victory_draw_character(CHAR_WEEMS, x, WALK_Y);
+		victory_wait_n_vsync(30);
 	}
 
-	eg_show_text("BLURBLE BLURBLE BLURBLE!");
-	eg_wait_ms(5000);
-	eg_clear_text();
+	victory_show_text("BLURBLE BLURBLE BLURBLE!");
+	victory_wait_s(5);
+	victory_clear_text();
 
 	/* Step 3: Reginald/Regina appears */
 	u8 reg_id = (g_options & OPT_CHARACTER) ? CHAR_REGINALD : CHAR_REGINA;
 
 	x = LEFT_X;
-	eg_wait_ms(5000);
-	eg_draw_character(reg_id, x, WALK_Y);
+	victory_wait_s(5);
+	v_animation_frame = 0;
+	victory_draw_character(reg_id, x, WALK_Y);
 
 	v_pen = PEN_3;
 	if (g_options & OPT_CHARACTER)
-		eg_show_text("UNCLE! ARE YOU OK? ITS ME, REGINALD!");
+		victory_show_text("UNCLE! ARE YOU OK? ITS ME, REGINALD!");
 	else
-		eg_show_text("UNCLE! ARE YOU OK? ITS ME, REGINA!");
-	eg_wait_ms(5000);
-	eg_clear_text();
+		victory_show_text("UNCLE! ARE YOU OK? ITS ME, REGINA!");
+	victory_wait_s(5);
+	victory_clear_text();
 
 	v_pen = PEN_2;
-	eg_show_text("WIBBLE!!! GET AWAY FROM ME, FIEND!");
-	eg_wait_ms(5000);
-	eg_clear_text();
+	victory_show_text("WIBBLE!!! GET AWAY FROM ME, FIEND!");
+	victory_wait_s(5);
+	victory_clear_text();
 
 	/* Step 4: Mr Weems disappears */
-	eg_erase_character(CHAR_WEEMS);
-	eg_wait_ms(5000);
+	victory_erase_character(CHAR_WEEMS);
+	victory_wait_s(5);
 
 	v_pen = PEN_3;
-	eg_show_text("COME BACK, UNCLE!");
-	eg_wait_ms(5000);
-	eg_clear_text();
+	victory_show_text("COME BACK, UNCLE!");
+	victory_wait_s(5);
+	victory_clear_text();
 
 	/* Step 5: Reginald/Regina runs to the right */
 	while (x < RIGHT_X) {
 		x += STEP;
-		eg_draw_character(reg_id, x, WALK_Y);
-		cpct_waitVSYNC();
-		cpct_waitVSYNC();
-		cpct_waitVSYNC();
+		victory_draw_character(reg_id, x, WALK_Y);
+		victory_wait_n_vsync(30);
 	}
 
-	eg_wait_ms(10000);
+	victory_wait_s(5);
+}
+
+static inline void victory_wait_n_vsync(u8 n) {
+
+	while (n--)
+		cpct_waitVSYNC();
 }
 
 /* Show bottom dialogue text (placeholder) */
-static void eg_show_text(const char *s) {
+static void victory_show_text(const char *s) {
 
 	video_print_centred_text(s, LINE_P_H * 22);
 }
 
-static void eg_clear_text(void) {
+static void victory_clear_text(void) {
 
 	video_print_text(
 		"                                       ", 0, LINE_P_H * 22);
 }
 
-static void eg_wait_ms(u16 ms) {
+static void victory_wait_s(u8 seconds) {
 
 	utils_reset_clock();
 	g_clock_on = true;
 
-	while (g_clock.ms + (g_clock.s * 1000) < ms) {
+	while (g_clock.s < seconds) {
 		cpct_waitVSYNC();
 		utils_clock_tick();
 	}
@@ -301,27 +344,39 @@ static void eg_wait_ms(u16 ms) {
 	g_clock_on = false;
 }
 
-/* Draw a sprite with erasure of previous position */
-static u16 last_x[2] = {0, 0};
-static u8 last_valid[2] = {0, 0};
-
-static void eg_draw_character(u8 id, u16 x, u8 y) {
+static void victory_draw_character(u8 id, u16 x, u8 y) {
 
 	if (last_valid[id])
-		eg_erase_character(id);
+		victory_erase_character(id);
 
-	if (id == CHAR_REGINALD)
-		video_draw_xor_sprite(get_reginald_frame(6), x, y);
-	else if (id == CHAR_REGINA)
-		video_draw_xor_sprite(get_regina_frame(6), x, y);
-	else if (id == CHAR_WEEMS)
-		victory_draw_weems_xor_sprite(weems_m_24x24_03, x, y - 8);
+	++v_animation_frame;
+	if (v_animation_frame > 2)
+		v_animation_frame = 0;
+
+	u8 *spr;
+	if (id == CHAR_REGINALD || id == CHAR_REGINA)
+		spr = (id == CHAR_REGINALD)
+			      ? victory_reginald_frame(6 + v_animation_frame)
+			      : victory_regina_frame(6 + v_animation_frame);
+	else {
+		if (v_animation_frame == 0)
+			spr = weems_m_24x24_03;
+		else if (v_animation_frame == 1)
+			spr = weems_m_24x24_04;
+		else
+			spr = weems_m_24x24_05;
+	}
+
+	if (id == CHAR_WEEMS)
+		victory_draw_weems_xor_sprite(spr, x, y - 8);
+	else
+		video_draw_xor_sprite(spr, x, y);
 
 	last_x[id] = x;
 	last_valid[id] = 1;
 }
 
-static void eg_erase_character(u8 id) {
+static void victory_erase_character(u8 id) {
 
 	if (!last_valid[id])
 		return;
@@ -330,12 +385,12 @@ static void eg_erase_character(u8 id) {
 	cpct_drawSolidBox(v_pos, 0, 6, 24);
 }
 
-static const u8 *get_reginald_frame(u8 idx) {
+static const u8 *victory_reginald_frame(u8 idx) {
 
 	return reginald_m_16x16_00 + (idx << 6);
 }
 
-static const u8 *get_regina_frame(u8 idx) {
+static const u8 *victory_regina_frame(u8 idx) {
 
 	return regina_m_16x16_00 + (idx << 6);
 }

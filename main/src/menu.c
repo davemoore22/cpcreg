@@ -34,8 +34,8 @@ const u8 border_flash[] = {
 walker_t reg_walk, regina_walk;
 
 static void menu_step_walker(walker_t *w);
-static const u8 *get_reginald_frame(u8 idx);
-static const u8 *get_regina_frame(u8 idx);
+static const u8 *victory_reginald_frame(u8 idx);
+static const u8 *victory_regina_frame(u8 idx);
 
 void menu_start(void) {
 
@@ -202,12 +202,12 @@ static void menu_step_walker(walker_t *w) {
 	}
 }
 
-static const u8 *get_reginald_frame(u8 idx) {
+static const u8 *victory_reginald_frame(u8 idx) {
 
 	return reginald_m_16x16_00 + (idx << 6);
 }
 
-static const u8 *get_regina_frame(u8 idx) {
+static const u8 *victory_regina_frame(u8 idx) {
 
 	return regina_m_16x16_00 + (idx << 6);
 }
@@ -222,13 +222,13 @@ void menu_draw_walkers(void) {
 
 		if (reg_walk.drawn) {
 			video_draw_xor_sprite(
-				get_reginald_frame(reg_walk.frame), x,
+				victory_reginald_frame(reg_walk.frame), x,
 				reg_walk.y);
 		}
 
 		menu_step_walker(&reg_walk);
 		video_draw_xor_sprite(
-			get_reginald_frame(reg_walk.frame), x, reg_walk.y);
+			victory_reginald_frame(reg_walk.frame), x, reg_walk.y);
 
 		reg_walk.drawn = true;
 	}
@@ -238,13 +238,13 @@ void menu_draw_walkers(void) {
 
 		if (regina_walk.drawn) {
 			video_draw_xor_sprite(
-				get_regina_frame(regina_walk.frame), x,
+				victory_regina_frame(regina_walk.frame), x,
 				regina_walk.y);
 		}
 
 		menu_step_walker(&regina_walk);
-		video_draw_xor_sprite(
-			get_regina_frame(regina_walk.frame), x, regina_walk.y);
+		video_draw_xor_sprite(victory_regina_frame(regina_walk.frame),
+			x, regina_walk.y);
 
 		regina_walk.drawn = true;
 	}
