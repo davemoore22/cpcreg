@@ -264,6 +264,8 @@ cpct_keyID menu_poll_input(void) {
 		return Key_3;
 	if (cpct_isKeyPressed(Key_4))
 		return Key_4;
+	if (cpct_isKeyPressed(Key_Tab))
+		return Key_Tab;
 	if (cpct_isKeyPressed(Key_9))
 		return Key_9;
 

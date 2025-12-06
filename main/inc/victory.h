@@ -18,40 +18,8 @@
 
 #pragma once
 
-/* Library Includes */
-#include <cpctelera.h>
-#include <stdbool.h> /* For Bool Type */
+#include "main.h"
 
-/* Top Level Includes */
-#include "lib/defines.h"
-#include "lib/enums.h"
-#include "lib/macros.h"
-#include "lib/types.h"
-
-/* Library Includes */
-#include "lib/memory.h"
-#include "lib/utilities.h"
-#include "lib/video.h"
-
-/* Data Includes */
-#include "dat/fonts.h"
-#include "dat/images.h"
-#include "dat/levels.h"
-#include "dat/music.h"
-#include "dat/strings.h"
-#include "dat/tiles.h"
-
-/* Game Parts */
-#include "between.h"
-#include "defeat.h"
-#include "entry.h"
-#include "game.h"
-#include "hiscores.h"
-#include "menu.h"
-#include "monster.h"
-#include "redefine.h"
-#include "settings.h"
-#include "victory.h"
-#include "welldone.h"
-
-void start(void);
+/* Public Functions */
+void victory_start(void);
+void victory_stop(void);

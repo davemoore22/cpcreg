@@ -159,3 +159,4 @@ PALETTE_TILES={0 3 6 15}
 #$(eval $(call IMG2SPRITES,img/reginald16x16nsew.png,1,reginald_m_16x16,16,16,$(PALETTE_TILES),tileset,out/))
 #$(eval $(call IMG2SPRITES,img/nonmasked16x16.png,1,tilenm16,16,16,$(PALETTE_TILES),tileset,out/))
 #$(eval $(call IMG2SPRITES,img/nonmasked8x8.png,1,tilenm8,8,8,$(PALETTE_TILES),tileset,out/))
+#$(eval $(call IMG2SPRITES,img/masked24x24.png,1,tile_m_24x24,24,24,$(PALETTE_TILES),tileset,out/))

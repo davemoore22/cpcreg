@@ -596,7 +596,7 @@ static bool game_play_level(void) {
 			status |= BIT_PAUSE;
 		if (input.quit)
 			status |= BIT_QUIT;
-		if (input.skip) {
+		if (input.skip && g_options & OPT_CHEAT) {
 			status |= BIT_SUCCESS;
 			continue;
 		}
