@@ -16,41 +16,10 @@
  * along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #include "main.h"
 
-bool pg = false;
-
-/* Main Application Entry Point */
-void main(void) {
-
-  u16 firmware;
-
-  u8 *pg_ptr = (u8 *)0xA601;
-
-  pg = *pg_ptr == 255;
-
-  /* Note that Firmware is disabled */
-  firmware = cpct_disableFirmware();
-
-  /* Initialise Display */
-  video_init();
-
-  /* Show Pressents Screen */
-  presents_start();
-  presents_stop();
-
-  /* Show Title Screen */
-  titles_start();
-  titles_stop();
-
-  /* Story */
-  story_start();
-  story_stop();
-
-  /* Guide */
-  guide_start();
-  guide_stop();
-
-  /* Reenable Firmware */
-  cpct_reenableFirmware(firmware);
-}
+/* Public Functions */
+void guide_start(void);
+void guide_stop(void);

@@ -44,6 +44,8 @@ bullet_t g_bullet;
 
 static const u8 (*g_palette)[4];
 
+bool g_sprite_flipped = false;
+
 bool g_completed = false;
 
 /* Working Screen */
@@ -329,7 +331,7 @@ static void game_reset_player(
 	/* Orientation & animation */
 	g_player.dir = dir;
 	g_player.frame = 0;
-	g_player.facing_right = dir == DIR_EAST;
+	g_player.facing_right = (g_sprite_flipped ? false : true);
 	// game_update_player_facing(dir);
 
 	/* No movement in progress */
@@ -1568,22 +1570,24 @@ void game_update_player_facing(dir_t newdir) {
 	if (newdir != DIR_EAST && newdir != DIR_WEST)
 		return;
 
-	/* Already facing the right way? */
-	if (newdir == DIR_EAST && g_player.facing_right)
-		return;
-	if (newdir == DIR_WEST && !g_player.facing_right)
+	/* Determine desired sheet state */
+	bool want_flipped = (newdir == DIR_WEST);
+
+	/* If already in correct orientation → no flip needed */
+	if (g_sprite_flipped == want_flipped)
 		return;
 
 	/* Base sprite sheet pointer */
 	u8 *base = (u8 *)(g_options & OPT_CHARACTER ? reginald_m_16x16_00
 						    : regina_m_16x16_00);
-	/* Flip East frames (6,7,8) */
+
+	/* Flip East-frame block (6,7,8) */
 	cpct_hflipSpriteM1(4, 16, base + (6 << 6));
 	cpct_hflipSpriteM1(4, 16, base + (7 << 6));
 	cpct_hflipSpriteM1(4, 16, base + (8 << 6));
 
-	/* Toggle facing flag */
-	g_player.facing_right = !g_player.facing_right;
+	/* Update sprite-sheet orientation flag */
+	g_sprite_flipped = !g_sprite_flipped;
 }
 
 static void game_do_pause(void) {

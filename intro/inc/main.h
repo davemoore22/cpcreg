@@ -39,6 +39,7 @@
 #include "video.h"
 
 /* Game Parts */
+#include "guide.h"
 #include "presents.h"
 #include "story.h"
 #include "titles.h"

@@ -16,13 +16,13 @@
  * along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "presents.h"
+#include "guide.h"
 
 /* Private Functions */
-static void presents_draw(void);
+static void guide_draw(void);
 
 /* Start the Title Screen */
-void presents_start(void) {
+void guide_start(void) {
 
   u16 duration;
   bool kp = false;
@@ -38,8 +38,8 @@ void presents_start(void) {
   g_clock_on = false;
 
   /* Draw Screen */
-  presents_draw();
-  video_reset_pal_presents();
+  guide_draw();
+  video_reset_pal_guide();
 
   /* Set up Clock Interrupt */
   g_clock_on = false;
@@ -47,7 +47,7 @@ void presents_start(void) {
   cpct_setInterruptHandler(utils_clock_interrupt);
 
   /* Start Clock */
-  duration = 3;
+  duration = 10;
   g_clock_on = true;
 
   /* Display for a number of seconds or until a keypress */
@@ -62,7 +62,7 @@ void presents_start(void) {
 }
 
 /* Stop the Transition "Between" Screen */
-void presents_stop(void) {
+void guide_stop(void) {
 
   video_wipe_scr(true);
   video_blk_scr();
@@ -70,8 +70,8 @@ void presents_stop(void) {
 }
 
 /* Draw the Grid Graphic */
-static void presents_draw(void) {
+static void guide_draw(void) {
 
   /* Decompresse image data from a compressed file onto the screen */
-  utils_load("PRESENTSSCR", VIDEO_MEM_START);
+  utils_load("GUIDE   SCR", VIDEO_MEM_START);
 }

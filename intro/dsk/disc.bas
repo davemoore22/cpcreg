@@ -15,27 +15,28 @@
 150 PRINT
 160 PRINT "THIS IS A COMPLETE AND PLAYABLE VERSION"
 170 PRINT
-180 PRINT "Currently yet to be implemented:"
-190 PRINT
-200 PRINT "* In-game SFX"
+180 PRINT "Note there is currently no in-game SFX,"
+190 PRINT "as I am awaiting full Arkos Tracker 3"
+200 PRINT "support in CPCTeleraNext/SDCC 4.5"
 210 PRINT
 220 PEN 3
-230 PRINT "Updated versions be found at:"
-240 PRINT "HTTP://TYPHONSOFT,ITCH.IO"
-250 PRINT
-260 PEN 2
-270 PRINT "Disk #1 (this disk): Story/Intro"
-280 PEN 2
-290 PRINT "Disk #2 (other disk): Main Game"
-300 PEN 3
-310 PRINT
-320 PRINT "You can run DISC.BAS from Disk #2"
-330 PRINT "to start the main game directly."
-340 PRINT
-350 PRINT "For a PG version run PGDISC.BAS"
-360 LOCATE 1, 25
-370 PRINT "<Press any key to continue>"
-380 WHILE INKEY$="":WEND
-390 CLS
-400 RUN "REGINTRO.BAS"
-410 
+230 PRINT "Get News and Updates at:"
+240 PRINT
+250 PRINT "TYPHONSOFT,ITCH.IO"
+260 PRINT
+270 PEN 2
+280 PRINT "Disk #1 (this disk): Story/Intro"
+290 PEN 2
+300 PRINT "Disk #2 (other disk): Main Game"
+310 PEN 3
+320 PRINT
+330 PRINT "You can run DISC.BAS from Disk #2"
+340 PRINT "to start the main game directly."
+350 PRINT
+360 PRINT "For a PG version run PGDISC.BAS"
+370 LOCATE 1, 25
+380 PRINT "<Press any key to continue>"
+390 WHILE INKEY$="":WEND
+400 CLS
+410 RUN "REGINTRO.BAS"
+420 

@@ -22,4 +22,4 @@
 
 /* Public Functions */
 void presents_start(void);
-void p_stop(void);
+void presents_stop(void);

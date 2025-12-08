@@ -102,6 +102,16 @@ void video_reset_pal_presents(void) {
   cpct_setBorder(HW_BLACK);
 }
 
+/* Reset the Palette back to Alternate Mode 1 Colours */
+void video_reset_pal_guide(void) {
+
+  static const u8 normal_pal[4] = {HW_BLACK, HW_BRIGHT_RED, HW_RED, HW_ORANGE};
+
+  cpct_waitVSYNC();
+  cpct_setPalette(normal_pal, sizeof(normal_pal));
+  cpct_setBorder(HW_BLACK);
+}
+
 /* Wait for a specified number of VSYNCs */
 void video_wait_VSYNC(u8 n) {
 

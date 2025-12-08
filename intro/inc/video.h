@@ -29,6 +29,7 @@ void video_init(void);
 void video_blk_scr(void);
 void video_reset_pal(void);
 void video_reset_pal_presents(void);
+void video_reset_pal_guide(void);
 void video_wait_VSYNC(u8 n);
 void video_clr_scr(void);
 void video_wipe_scr(bool dir);
