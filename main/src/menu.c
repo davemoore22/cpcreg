@@ -101,8 +101,7 @@ void menu_draw_centre(void) {
 		g_strings[ABOUT_TEXT + 1], (ABOUT_Y + 1) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_2;
-	video_print_centred_text(
-		"December 2025 Beta #3", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
+	video_print_centred_text("v1.00", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_1;
 	u8 *pg_ptr = (u8 *)0xA601;

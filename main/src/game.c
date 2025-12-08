@@ -86,7 +86,6 @@ static inline u16 game_get_screen_xy(u8 x, u8 y);
 static void game_use_holy_water_bomb(events_t *events);
 static void game_smash_all_sarcophagi_on_screen(u8 screen);
 static void game_destroy_all_jars_on_screen(u8 screen, events_t *events);
-static void game_update_player_facing(dir_t newdir);
 static void game_update_artifact_string(void);
 static void game_update_bomb_string(void);
 static void game_update_keys_string(void);
@@ -331,7 +330,7 @@ static void game_reset_player(
 	g_player.dir = dir;
 	g_player.frame = 0;
 	g_player.facing_right = dir == DIR_EAST;
-	game_update_player_facing(dir);
+	// game_update_player_facing(dir);
 
 	/* No movement in progress */
 	g_player.moving = false;
@@ -531,6 +530,9 @@ static void game_do_player_move(i8 dx, i8 dy, dir_t dir, events_t *events) {
 	g_player.step_left = 2; /* 2 frames of tween = half-tile steps */
 	g_player.moving = true;
 
+	/* Movement cooldown (slows movement) */
+	g_player.move_cooldown = 1;
+
 	if (dx < 0)
 		g_player.step_bx = -1;
 	else if (dx > 0)
@@ -572,8 +574,6 @@ static bool game_play_level(void) {
 	} else if (g_game.level == 6) {
 		game_reset_player(3, DIR_EAST, 10, 2);
 		game_load_bg_for_screen(3);
-		// game_reset_player(2, DIR_EAST, 12, 2);
-		// game_load_bg_for_screen(2);
 	}
 
 	g_completed = false;
@@ -809,6 +809,7 @@ static bool game_try_move_screen(dir_t dir, events_t *events) {
 		return false;
 
 	/* 2. Apply transition */
+	events->rotated = false; /* Don't flip player sprites on move screen */
 	game_reset_player(new_screen, dir, gx, gy);
 	game_load_bg_for_screen(new_screen);
 
@@ -1041,6 +1042,17 @@ static void game_fire_bullet(void) {
 	g_bullet.grid_y = g_player.grid_y;
 	g_bullet.byte_x = g_player.byte_x;
 	g_bullet.byte_y = g_player.byte_y;
+
+	// Apply bullet offset only if NOT on the screen edge
+	// if (g_player.dir == DIR_EAST) {
+	//	if (g_player.grid_x <
+	//		SCREEN_U_W - 1) // ensure not rightmost tile
+	//		g_bullet.byte_x += 1;
+	//} else if (g_player.dir == DIR_WEST) {
+	////	if (g_player.grid_x > 0) // ensure not leftmost tile
+	//		g_bullet.byte_x -= 1;
+	//}
+
 	g_bullet.last_grid_x = g_bullet.grid_x;
 	g_bullet.last_grid_y = g_bullet.grid_y;
 
@@ -1077,12 +1089,12 @@ static void game_step_bullet(events_t *events) {
 	u8 ly = g_bullet.last_grid_y;
 	u8 *old_vpos;
 
-	if (!(lx == (u8)g_player.grid_x && ly == (u8)g_player.grid_y)) {
-		old_vpos = cpct_getScreenPtr(CPCT_VMEM_START,
-			GAME_WINDOW_X + (lx << 2), GAME_WINDOW_Y + (ly << 4));
-		video_mark_dirty_tile(lx, ly);
-		events->dirtied_tiles = true;
-	}
+	// if (!(lx == (u8)g_player.grid_x && ly == (u8)g_player.grid_y)) {
+	//	old_vpos = cpct_getScreenPtr(CPCT_VMEM_START,
+	//		GAME_WINDOW_X + (lx << 2), GAME_WINDOW_Y + (ly << 4));
+	video_mark_dirty_tile(lx, ly);
+	events->dirtied_tiles = true;
+	//}
 
 	/* Speed control for bullet */
 	if (g_bullet.delay_counter > 0) {
@@ -1188,8 +1200,8 @@ static void game_step_bullet(events_t *events) {
 	u8 gx = g_bullet.grid_x;
 	u8 gy = g_bullet.grid_y;
 
-	if (!(gx == (u8)g_player.grid_x && gy == (u8)g_player.grid_y))
-		video_mark_dirty_tile(gx, gy);
+	// if (!(gx == (u8)g_player.grid_x && gy == (u8)g_player.grid_y))
+	video_mark_dirty_tile(gx, gy);
 
 	g_bullet.v_pos = cpct_getScreenPtr(CPCT_VMEM_START,
 		GAME_WINDOW_X + g_bullet.byte_x,
@@ -1550,7 +1562,7 @@ static void game_smash_all_sarcophagi_on_screen(u8 screen) {
 	}
 }
 
-static void game_update_player_facing(dir_t newdir) {
+void game_update_player_facing(dir_t newdir) {
 
 	/* Only East and West need flipping */
 	if (newdir != DIR_EAST && newdir != DIR_WEST)

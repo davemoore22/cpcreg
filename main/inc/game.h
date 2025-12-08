@@ -43,3 +43,4 @@ u32 game_start(void);
 void game_stop(void);
 void game_update_health_string(void);
 inline void game_take_damage(u16 amount);
+void game_update_player_facing(dir_t newdir);

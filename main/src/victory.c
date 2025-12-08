@@ -77,10 +77,14 @@ static const u8 *victory_reginald_frame(u8 idx);
 void victory_start(void) {
 
 	cpct_setInterruptHandler(victory_interrupt);
+
 	cpct_waitVSYNC();
 
 	victory_reset_colours(false);
 	video_reset_timers();
+
+	/* Just in case the Sprites were left facing the "wrong" way */
+	game_update_player_facing(DIR_EAST);
 
 	victory_do_kill();
 	victory_do_uncle();
