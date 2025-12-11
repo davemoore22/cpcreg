@@ -32,9 +32,6 @@ extern player_t g_player;
 extern game_t g_game;
 extern bullet_t g_bullet;
 
-extern u8 g_screen_bg[SCREEN_U_W * SCREEN_U_H];
-extern u8 g_level_fg[LEVEL_SCRS * SCREEN_U_W * SCREEN_U_H];
-
 extern bool g_has_bullet;
 
 /* Public functions */

@@ -226,3 +226,9 @@ typedef struct {
 		u8 anim_delay;
 		u8 anim_phase;
 } walker_t;
+
+/* Border flashing triplets */
+typedef struct {
+
+		u8 c0, c1, c2;
+} triplet_t;

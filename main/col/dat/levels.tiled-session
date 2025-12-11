@@ -3,15 +3,12 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level6.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         ".tileset.tsx": {
-            "scaleInDock": 1
-        },
-        "/home/dave/Development/Amstrad/reginald/branch/reginald-b6a648560c5cb523825539281e82249e78c89c87/collateral/dat/nonmasked16x16.tsx": {
             "scaleInDock": 1
         },
         "1-0-bg.tmx": {
@@ -647,11 +644,11 @@
             }
         },
         "level5-bg.tmx": {
-            "scale": 2,
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 602,
-                "y": 440.25
+                "x": 377.3333333333333,
+                "y": 411.33333333333326
             }
         },
         "level5-fg.tmx": {
@@ -663,11 +660,11 @@
             }
         },
         "level5.tmx": {
-            "scale": 1.0638020833333333,
-            "selectedLayer": 1,
+            "scale": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 383.52998776009787,
-                "y": 288.11750305997555
+                "x": 374,
+                "y": 295.5
             }
         },
         "level6-fg.tmx": {
@@ -699,31 +696,29 @@
             "scaleInEditor": 1
         }
     },
-    "last.externalTilesetPath": "/home/dave/Development/Amstrad/reginald/main/col/dat",
-    "last.imagePath": "/home/dave/Development/Amstrad/reginald/main/col/dat",
+    "last.externalTilesetPath": "/home/dave/Development/Amstrad/cpcreg/main/col/dat",
+    "last.imagePath": "/home/dave/Development/Amstrad/cpcreg/main/col/dat",
     "map.height": 9,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "map.width": 16,
     "openFiles": [
-        "level6.tmx",
-        "6-2-bg.tmx"
     ],
     "project": "levels.tiled-project",
     "recentFiles": [
-        "6-2-bg.tmx",
-        "level6.tmx",
-        "level6-fg.tmx",
-        "6-0-bg.tmx",
-        "6-1-bg.tmx",
-        "6-3-bg.tmx",
-        "6-4-bg.tmx",
-        "level3.tmx",
-        "level1-fg.tmx",
-        "level1-bg.tmx",
-        "level1.tmx",
-        "level3-fg.tmx"
+        "5-7-bg.tmx",
+        "level5.tmx",
+        "5-11-bg.tmx",
+        "level5-bg.tmx",
+        "level5-fg.tmx",
+        "5-10-bg.tmx",
+        "5-9-bg.tmx",
+        "5-8-bg.tmx",
+        "5-6-bg.tmx",
+        "5-5-bg.tmx",
+        "5-4-bg.tmx",
+        "5-3-bg.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

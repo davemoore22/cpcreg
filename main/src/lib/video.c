@@ -491,28 +491,6 @@ void video_draw_player(void) {
 		g_player.screen, g_player.grid_x, g_player.grid_y);
 }
 
-void video_flash_border_triplet(u8 c0, u8 c1, u8 c2) {
-
-	/* Fade up */
-	cpct_setBorder(c0);
-	cpct_waitVSYNC();
-
-	cpct_setBorder(c1);
-	cpct_waitVSYNC();
-
-	cpct_setBorder(c2);
-	cpct_waitVSYNC();
-
-	/* Fade down */
-	cpct_setBorder(c1);
-	cpct_waitVSYNC();
-
-	cpct_setBorder(c0);
-	cpct_waitVSYNC();
-
-	cpct_setBorder(HW_BLACK);
-}
-
 void video_monster_draw_all(void) {
 
 	monster_t *m;
@@ -577,4 +555,26 @@ void video_draw_xor_sprite(const u8 *spr, u8 x, u8 y) {
 	u8 *vpos = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
 
 	cpct_drawSpriteBlended(vpos, 16, 4, spr);
+}
+
+void video_flash_border(u8 c0, u8 c1, u8 c2) {
+
+	cpct_setBorder(HW_BLACK);
+	utils_wait(1000);
+	/* Fade up */
+	cpct_setBorder(c0);
+	utils_wait(1000);
+
+	cpct_setBorder(c1);
+	utils_wait(1000);
+
+	cpct_setBorder(c2);
+	utils_wait(1000);
+
+	/* Fade down */
+	cpct_setBorder(c1);
+	utils_wait(1000);
+
+	cpct_setBorder(HW_BLACK);
+	utils_wait(1000);
 }

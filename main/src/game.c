@@ -45,11 +45,9 @@ bullet_t g_bullet;
 static const u8 (*g_palette)[4];
 
 bool g_sprite_flipped = false;
-
 bool g_completed = false;
 
-/* Working Screen */
-u8 temp_bg[SCREEN_U_W * SCREEN_U_H];
+/* Working screens are all in firmware area once it has been disabled */
 
 /* Private Functions */
 static void game_draw_all(void);
@@ -102,7 +100,7 @@ static inline u16 game_get_screen_xy(u8 x, u8 y) {
 /* Set up Game */
 void game_setup(void) {
 
-	g_options = OPT_CHARACTER | OPT_MULTICOLOUR | OPT_TEXT;
+	g_options = OPT_CHARACTER | OPT_TEXT;
 
 	/* Default Keyboard Controls */
 	g_controls[KEY_UP] = Key_Q;
@@ -242,10 +240,10 @@ void game_interrupt(void) {
 	if (g_int_idx == 4)
 		utils_wait(54);
 
-	if (g_options & OPT_MULTICOLOUR)
-		cpct_setPalette(g_palette[g_int_idx], 4);
-	else
+	if (g_options & OPT_GREEN_SCREEN)
 		cpct_setPalette(palette_mn, sizeof(palette_mn));
+	else
+		cpct_setPalette(g_palette[g_int_idx], 4);
 
 	if (++g_int_idx == 6)
 		g_int_idx = 0;
@@ -268,13 +266,18 @@ static void game_reset_game(void) {
 	bool options_text = g_options & OPT_TEXT;
 
 	/* Initial values */
-	g_game.level = 1; /* Starting level */
+	g_game.level = 0; /* Starting level */
 	g_game.score = 0;
 	g_game.max_hp = 2000;
 	g_game.health = g_game.max_hp;
 	g_game.artifacts = 0;
-	g_game.bombs = 0;
-	g_game.keys = 0;
+	if (g_options & OPT_CHEAT) {
+		g_game.bombs = 64;
+		g_game.keys = 64;
+	} else {
+		g_game.bombs = 0;
+		g_game.keys = 0;
+	}
 
 	/* Update string equivalents */
 	game_update_hud_strings();
@@ -572,7 +575,7 @@ static bool game_play_level(void) {
 		game_load_bg_for_screen(2);
 	} else if (g_game.level == 5) {
 		game_reset_player(0, DIR_EAST, 2, 3);
-		game_load_bg_for_screen(2);
+		game_load_bg_for_screen(0);
 	} else if (g_game.level == 6) {
 		game_reset_player(3, DIR_EAST, 10, 2);
 		game_load_bg_for_screen(3);
@@ -614,9 +617,9 @@ static bool game_play_level(void) {
 
 		/* Pause */
 		if (status & BIT_PAUSE) {
-			video_flash_border_triplet(TRIPLET_PURPLE);
+			video_flash_border(TRIPLET_PURPLE);
 			game_do_pause();
-			video_flash_border_triplet(TRIPLET_PURPLE);
+			video_flash_border(TRIPLET_PURPLE);
 			status &= ~BIT_PAUSE;
 			continue;
 		}
@@ -799,13 +802,13 @@ static bool game_try_move_screen(dir_t dir, events_t *events) {
 	/* 1. Precheck the landing tile on target screen */
 
 	/* Decompress the target screen's BG temporarily */
-	cpct_zx7b_decrunch_s(temp_bg + (SCREEN_U_W * SCREEN_U_H) - 1,
+	cpct_zx7b_decrunch_s(g_temp_bg + g_temp_bg_sz - 1,
 		level_bgs[g_game.level - 1][new_screen].data_end);
 
 	u16 idx = utils_get_screen_x_y(new_screen, gx, gy);
 
 	i8 fg = g_level_fg[idx];
-	i8 bg = temp_bg[game_get_screen_xy(gx, gy)];
+	i8 bg = g_temp_bg[game_get_screen_xy(gx, gy)];
 
 	if (!game_check_landing_tile(fg, bg))
 		return false;
@@ -863,38 +866,38 @@ static void game_show_hint(const u8 idx) {
 static void game_load_level(void) {
 
 	/* Clear working memory */
-	cpct_memset(g_level_fg, FLOOR_GFX, sizeof(g_level_fg));
+	cpct_memset(g_level_fg, FLOOR_GFX, g_level_fg_sz);
 
 	/* Decompress level data */
 	switch (g_game.level) {
 	case 1:
 		cpct_zx7b_decrunch_s(
-			g_level_fg + sizeof(g_level_fg) - 1, l_level_1_fg_end);
+			g_level_fg + g_level_fg_sz - 1, l_level_1_fg_end);
 		g_palette = palette_level_1;
 		break;
 	case 2:
 		cpct_zx7b_decrunch_s(
-			g_level_fg + sizeof(g_level_fg) - 1, l_level_2_fg_end);
+			g_level_fg + g_level_fg_sz - 1, l_level_2_fg_end);
 		g_palette = palette_level_2;
 		break;
 	case 3:
 		cpct_zx7b_decrunch_s(
-			g_level_fg + sizeof(g_level_fg) - 1, l_level_3_fg_end);
+			g_level_fg + g_level_fg_sz - 1, l_level_3_fg_end);
 		g_palette = palette_level_3;
 		break;
 	case 4:
 		cpct_zx7b_decrunch_s(
-			g_level_fg + sizeof(g_level_fg) - 1, l_level_4_fg_end);
+			g_level_fg + g_level_fg_sz - 1, l_level_4_fg_end);
 		g_palette = palette_level_4;
 		break;
 	case 5:
 		cpct_zx7b_decrunch_s(
-			g_level_fg + sizeof(g_level_fg) - 1, l_level_5_fg_end);
+			g_level_fg + g_level_fg_sz - 1, l_level_5_fg_end);
 		g_palette = palette_level_5;
 		break;
 	case 6:
 		cpct_zx7b_decrunch_s(
-			g_level_fg + sizeof(g_level_fg) - 1, l_level_6_fg_end);
+			g_level_fg + g_level_fg_sz - 1, l_level_6_fg_end);
 		g_palette = palette_level_6;
 		break;
 	}
@@ -1089,14 +1092,9 @@ static void game_step_bullet(events_t *events) {
 	/* Mark old tile dirty (unless its the player tile)  */
 	u8 lx = g_bullet.last_grid_x;
 	u8 ly = g_bullet.last_grid_y;
-	u8 *old_vpos;
 
-	// if (!(lx == (u8)g_player.grid_x && ly == (u8)g_player.grid_y)) {
-	//	old_vpos = cpct_getScreenPtr(CPCT_VMEM_START,
-	//		GAME_WINDOW_X + (lx << 2), GAME_WINDOW_Y + (ly << 4));
 	video_mark_dirty_tile(lx, ly);
 	events->dirtied_tiles = true;
-	//}
 
 	/* Speed control for bullet */
 	if (g_bullet.delay_counter > 0) {
@@ -1307,7 +1305,7 @@ static bool game_handle_tile_on_entry(
 	if (IS_BOSS(fg)) {
 
 		/* Fixed Position on Screen */
-		video_flash_border_triplet(TRIPLET_RED);
+		video_flash_border(TRIPLET_RED);
 
 		for (u8 gy = 0; gy < SCREEN_U_H; gy++) {
 			for (u8 gx = 0; gx < SCREEN_U_W; gx++) {
@@ -1344,15 +1342,14 @@ static bool game_handle_tile_on_entry(
 
 	if (IS_PHYLACTERY(fg)) {
 		if (g_game.artifacts == 0) {
-			video_flash_border_triplet(TRIPLET_RED);
+			video_flash_border(TRIPLET_RED);
 			game_maybe_hint(HINT_PHLACTERY_NO_ARTEFACT);
 			game_take_damage(250);
 			game_update_health_string();
 			events->health_updated = true;
 			events->redraw_hud = true;
 		} else {
-
-			video_flash_border_triplet(TRIPLET_GREEN);
+			video_flash_border(TRIPLET_GREEN);
 			game_maybe_hint(HINT_PHLACTERY_DESTROY);
 			events->health_updated = true;
 			events->redraw_hud = true;
@@ -1385,8 +1382,7 @@ static bool game_handle_tile_on_entry(
 		}
 
 		/* Open door */
-		if (!(g_options & OPT_CHEAT))
-			--g_game.keys;
+		--g_game.keys;
 		game_update_hud_strings();
 		game_open_door(dx, dy);
 
@@ -1420,14 +1416,14 @@ static bool game_handle_tile_on_entry(
 		fg == ITEM_ARTIFACT) {
 		switch (fg) {
 		case ITEM_KEY:
-			video_flash_border_triplet(TRIPLET_MAGENTA);
+			video_flash_border(TRIPLET_MAGENTA);
 			game_maybe_hint(HINT_FOUND_KEY);
 			++g_game.keys;
 			game_update_hud_strings();
 			break;
 
 		case ITEM_HEALTH:
-			video_flash_border_triplet(TRIPLET_GREEN);
+			video_flash_border(TRIPLET_GREEN);
 			game_maybe_hint(HINT_FOUND_HEALTH);
 			g_game.health += 100;
 			if (g_game.health > 2000)
@@ -1438,13 +1434,13 @@ static bool game_handle_tile_on_entry(
 			break;
 
 		case ITEM_BOMB:
-			video_flash_border_triplet(TRIPLET_YELLOW);
+			video_flash_border(TRIPLET_YELLOW);
 			++g_game.bombs;
 			game_update_hud_strings();
 			break;
 
 		case ITEM_ARTIFACT:
-			video_flash_border_triplet(TRIPLET_ORANGE);
+			video_flash_border(TRIPLET_ORANGE);
 			game_maybe_hint(HINT_FOUND_ARTIFACT);
 			++g_game.artifacts;
 			game_update_hud_strings();
@@ -1490,7 +1486,7 @@ static void game_load_bg_for_screen(u8 screen_id) {
 	const u8 *src_end = level_bgs[g_game.level - 1][screen_id].data_end;
 
 	/* Destination end = last byte of g_screen_bg */
-	u8 *dst_end = g_screen_bg + (SCREEN_U_W * SCREEN_U_H) - 1;
+	u8 *dst_end = g_screen_bg + g_screen_bg_sz - 1;
 
 	cpct_zx7b_decrunch_s(dst_end, src_end);
 
@@ -1505,7 +1501,7 @@ void game_use_holy_water_bomb(events_t *events) {
 	if (g_game.bombs == 0)
 		return;
 
-	video_flash_border_triplet(TRIPLET_YELLOW);
+	video_flash_border(TRIPLET_YELLOW);
 
 	/* 1. Kill monsters */
 	for (u8 i = 0; i < MAX_MONSTERS; i++) {
@@ -1522,8 +1518,9 @@ void game_use_holy_water_bomb(events_t *events) {
 
 	--g_game.bombs;
 	game_update_hud_strings();
+	events->redraw_hud = true;
 
-	video_flash_border_triplet(TRIPLET_YELLOW);
+	video_flash_border(TRIPLET_YELLOW);
 }
 
 static void game_destroy_all_jars_on_screen(u8 screen, events_t *events) {

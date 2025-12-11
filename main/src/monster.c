@@ -582,7 +582,12 @@ void monster_player_collisions(events_t *events) {
 		if (m->grid_x == (u8)g_player.grid_x &&
 			m->grid_y == (u8)g_player.grid_y) {
 
-			game_take_damage(MONSTER_CONTACT_DAMAGE);
+			if (m->type == MON_BAT)
+				game_take_damage(100);
+			else if (m->type == MON_ZOMBIE)
+				game_take_damage(200);
+			else if (m->type == MON_GHOST)
+				game_take_damage(300);
 			game_update_health_string();
 			events->health_updated = true;
 			events->redraw_hud = true;
@@ -592,7 +597,7 @@ void monster_player_collisions(events_t *events) {
 
 			video_mark_dirty_tile(m->grid_x, m->grid_y);
 
-			video_flash_border_triplet(TRIPLET_RED);
+			video_flash_border(TRIPLET_RED);
 		}
 	}
 }

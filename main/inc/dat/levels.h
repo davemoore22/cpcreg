@@ -36,7 +36,7 @@ extern const unsigned char l_level_1_fg[404];
 extern const unsigned char l_level_2_fg[443];
 extern const unsigned char l_level_3_fg[349];
 extern const unsigned char l_level_4_fg[389];
-extern const unsigned char l_level_5_fg[450];
+extern const unsigned char l_level_5_fg[445];
 extern const unsigned char l_level_6_fg[160];
 
 // Address of the latest byte of the compressed array (for unpacking purposes)
@@ -109,18 +109,18 @@ extern const unsigned char l_level_6_fg[160];
 // Compresor used:   zx7b
 // Files compressed: [ 'out/level5-fg.bin' ]
 // Uncompressed:     1728 bytes
-// Compressed:       450 bytes
-// Space saved:      1278 bytes
+// Compressed:       445 bytes
+// Space saved:      1283 bytes
 //
 
-#ifndef l_level_5_fg_450_H
-#define l_level_5_fg_450_H
+#ifndef l_level_5_fg_445_H
+#define l_level_5_fg_445_H
 
 // Address of the latest byte of the compressed array (for unpacking purposes)
-#define l_level_5_fg_end (l_level_5_fg + 450 - 1)
+#define l_level_5_fg_end (l_level_5_fg + 445 - 1)
 
 // Compressed and uncompressed sizes
-#define l_level_5_fg_size_z 450
+#define l_level_5_fg_size_z 445
 #define l_level_5_fg_size 1728
 
 #endif
@@ -1482,7 +1482,6 @@ extern const unsigned char level_5_11_bg[40];
 // Compressed and uncompressed sizes
 #define level_5_11_bg_size_z 40
 #define level_5_11_bg_size 144
-
 #endif
 
 // File 'out/level_6_0_bg.h' generated using cpct_pack

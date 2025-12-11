@@ -32,6 +32,7 @@ void settings_start(void) {
 	video_clear_centre();
 	settings_draw();
 
+	bool flash = false;
 	while (1) {
 
 		static const cpct_keyID keys[] = {
@@ -39,17 +40,28 @@ void settings_start(void) {
 
 		key = utils_wait_for_keys(keys, 5);
 
-		if (key == Key_1)
+		if (key == Key_1) {
 			g_options ^= OPT_SFX;
-		else if (key == Key_2)
+			flash = true;
+		} else if (key == Key_2) {
 			g_options ^= OPT_CHEAT;
-		else if (key == Key_3)
-			g_options ^= OPT_MULTICOLOUR;
-		else if (key == Key_4)
+			flash = true;
+		} else if (key == Key_3) {
+			g_options ^= OPT_GREEN_SCREEN;
+			flash = true;
+		} else if (key == Key_4) {
 			g_options ^= OPT_TEXT;
-		else if (key == Key_Esc) {
+			flash = true;
+		} else if (key == Key_Esc) {
 			cpct_memset(g_game.hints, options_text, HINTS_SZ);
 			return;
+		}
+
+		if (flash) {
+
+			video_flash_border(TRIPLET_BLUE);
+
+			flash = false;
 		}
 
 		settings_draw();
@@ -71,7 +83,7 @@ static void settings_draw(void) {
 	static const u8 option_indices[] = {
 		OPT_SFX,
 		OPT_CHEAT,
-		OPT_MULTICOLOUR,
+		OPT_GREEN_SCREEN,
 		OPT_TEXT,
 	};
 	static const u8 string_indices[] = {

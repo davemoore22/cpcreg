@@ -23,6 +23,7 @@
 void main(void) {
 
 	cpct_disableFirmware();
+	cpct_setStackLocation(STACK_LOC);
 	start();
 }
 
@@ -75,7 +76,7 @@ void start(void) {
 			if (key == Key_4 && m_toggle_cooldown == 0) {
 				g_options ^= OPT_CHARACTER;
 				menu_draw_title();
-				video_flash_border_triplet(TRIPLET_BLUE);
+				//video_flash_border_triplet(TRIPLET_BLUE);
 				redraw = false;
 				m_toggle_cooldown = 10;
 			}

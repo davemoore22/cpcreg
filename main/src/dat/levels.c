@@ -162,7 +162,7 @@ const screen_bg_t level_bgs[6][LEVELS_SZ] = {
 		{level_6_0_bg, level_6_0_bg_end},
 	}};
 
-/* Screen Connections (format is N, S, E, Wm then Screens 0 to 11) */
+/* Screen Connections (format is N, S, E, W then Screens 0 to 11) */
 const u8 l_next_screen[6][4][12] = {
 	{
 		{1, 2, 3, 4, 5, 8, NO_LINK, NO_LINK, 9, NO_LINK, NO_LINK,
@@ -195,11 +195,11 @@ const u8 l_next_screen[6][4][12] = {
 			NO_LINK, NO_LINK, 8},
 	},
 	{
-		{9, 9, 9, 9, 9, 10, 9, NO_LINK, 0, NO_LINK, 11, NO_LINK},
-		{8, 8, 8, 8, 8, 8, 8, NO_LINK, NO_LINK, 1, 5, 10},
-		{1, 2, 3, 4, 5, 6, 5, 6, NO_LINK, NO_LINK, NO_LINK, NO_LINK},
-		{NO_LINK, 0, 0, 0, 0, 0, 6, NO_LINK, NO_LINK, NO_LINK, NO_LINK,
+		{9, 9, 9, 9, 9, 10, 9, NO_LINK, 0, NO_LINK, 11, 0},
+		{8, 8, 8, 8, 8, 8, 8, NO_LINK, NO_LINK, 0, 5, 10},
+		{1, 2, 3, 4, 5, 6, 7, NO_LINK, NO_LINK, NO_LINK, NO_LINK,
 			NO_LINK},
+		{NO_LINK, 0, 0, 0, 0, 0, 5, 6, NO_LINK, NO_LINK, 5, 10},
 	},
 	{
 		{NO_LINK, NO_LINK, NO_LINK, NO_LINK, 1, NO_LINK, NO_LINK,

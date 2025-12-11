@@ -20,24 +20,34 @@
 
 #include <cpctelera.h>
 
-/* C-standard used for Compilation */
-#define C99
-#undef C11
-
-/* For Image Decompression */
-#define VIDEO_MEM_END ((void *)0xFFFF)
-#define VIDEO_MEM_START ((u8 *)0xC000)
-#define VIDEO_MEM_SIZE ((u8)0x4000)
-#define STACK_LOC ((u8 *)0x00FF)
-#define TAPE_OR_DISC_LOC ((u8 *)0xA600)
-
-#define KEY_NONE 0xFF
+/* Level Screen Size */
+#define SCREEN_U_W 16
+#define SCREEN_U_H 9
+#define LEVEL_SCRS 12
+#define TILE_ARRAY_W 48
+#define SCREENS_W 3
+#define SCREENS_H 4
 
 /* Data Locations */
+#define STACK_LOC ((void *)0x00FF)
 #define MASK_TABLE_LOC 0x0200 /* 0x0100 bytes long */
 #define DISK_TABLE_LOC 0x0300 /* 0x0100 bytes long */
-#define GAME_SFX_LOC 0x1000   /* 300 bytes long */
-#define CODE_ENTRY_POINT 0x1200
+#define CODE_START_LOC 0x0480 /* See build_config.mk */
+#define DATA_START_LOC 0x6680 /* See build_config.mk */
+
+#define VIDEO_MEM_START ((u8 *)0xC000)
+#define VIDEO_MEM_END ((void *)0xFFFF)
+#define VIDEO_MEM_SIZE ((u8)0x4000)
+
+/* Run time storage for level data */
+#define g_level_fg ((u8 *)0xA620)
+#define g_level_fg_sz LEVEL_SCRS * SCREEN_U_W * SCREEN_U_H
+#define g_screen_bg ((u8 *)0xAD20)
+#define g_screen_bg_sz 16 * 9
+#define g_temp_bg ((u8 *)0xAE20)
+#define g_temp_bg_sz 16 * 9
+
+#define KEY_NONE 0xFF
 
 /* Size of Character Font in Bytes/Lines (8x8 pixels) */
 #define LINE_P_W 2
@@ -86,13 +96,6 @@
 #define INBETWEEN_Y 18
 #define CONGRATS_Y 6
 #define INITIALS_Y 16
-
-/* Level Screen Size */
-#define SCREEN_U_W 16
-#define SCREEN_U_H 9
-#define TILE_ARRAY_W 48
-#define SCREENS_W 3
-#define SCREENS_H 4
 
 /* Game Screen Layoaut (Bytes)*/
 #define GAME_WINDOW_X 8
@@ -161,7 +164,7 @@
 #define OPT_CHARACTER 0x01
 #define OPT_CHEAT 0x02
 #define OPT_SFX 0x04
-#define OPT_MULTICOLOUR 0x08
+#define OPT_GREEN_SCREEN 0x08
 #define OPT_TEXT 0x10
 
 /* Pens */
@@ -182,7 +185,7 @@
 #define FLOOR_GFX 16
 
 #define MAX_MONSTERS 8
-#define MONSTER_CONTACT_DAMAGE 100
+#define MONSTER_CONTACT_DAMAGE 250
 
 #define BOSS_START 29
 #define BOSS_END 31
@@ -295,6 +298,7 @@
 #define HINT_PHLACTERY_DESTROY_TEXT 76
 
 /* Border Flashes */
+
 #define TRIPLET_BLUE HW_BLUE, HW_BRIGHT_BLUE, HW_PASTEL_BLUE
 #define TRIPLET_RED HW_RED, HW_BRIGHT_RED, HW_ORANGE
 #define TRIPLET_GREEN HW_GREEN, HW_BRIGHT_GREEN, HW_PASTEL_GREEN
