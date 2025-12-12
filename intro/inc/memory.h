@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -31,8 +31,8 @@ cpctm_declareMaskTable(v_mask_table);
 #ifdef __INTELLISENSE__
 #pragma diag_suppress 130
 #endif
-extern void asm_load_file(
-	u8 *fileName, u8 *destBuffer, u8 *sectorTable) __z88dk_callee;
+extern void asm_load_file(u8 *fileName, u8 *destBuffer,
+                          u8 *sectorTable) __z88dk_callee;
 #ifdef __INTELLISENSE__
 #pragma diag_default 130
 #endif

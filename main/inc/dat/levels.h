@@ -31,7 +31,7 @@ extern const u8 palette_level_4[6][4];
 extern const u8 palette_level_5[6][4];
 extern const u8 palette_level_6[6][4];
 
-extern const u8 l_minimap_masks[6][12];
+// extern const u8 l_minimap_masks[6][12];
 
 // Declaration of the compressed arrays
 extern const unsigned char l_level_1_fg[404];

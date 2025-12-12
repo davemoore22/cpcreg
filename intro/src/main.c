@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -18,16 +18,10 @@
 
 #include "main.h"
 
-bool pg = false;
-
 /* Main Application Entry Point */
 void main(void) {
 
   u16 firmware;
-
-  u8 *pg_ptr = (u8 *)0xA601;
-
-  pg = *pg_ptr == 255;
 
   /* Note that Firmware is disabled */
   firmware = cpct_disableFirmware();

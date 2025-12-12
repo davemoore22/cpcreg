@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -22,63 +22,58 @@
 
 /* Hiscore object */
 typedef struct {
-		char initials[4]; /* scorer (user-entered, length 3 chars) */
-		u32 score;	  /* score */
-		u8 width;	  /* width in digits of score as string */
+  char initials[4]; /* scorer (user-entered, length 3 chars) */
+  u32 score;        /* score */
+  u8 width;         /* width in digits of score as string */
 } score_t;
 
 /* Screen Coordinate */
 typedef struct {
-		u8 x; /* x coordinate (0 is top-left) */
-		u8 y; /* y coordinate (0 is top-left) */
+  u8 x; /* x coordinate (0 is top-left) */
+  u8 y; /* y coordinate (0 is top-left) */
 } pos_t;
 
 /* Realtime clock */
 typedef struct {
-		u16 ms; /* Milliseconds*/
-		u16 s;	/* Seconds */
+  u16 ms; /* Milliseconds*/
+  u16 s;  /* Seconds */
 } clock_t;
 
 /* Cardinal direction */
-typedef enum {
-	DIR_SOUTH = 0,
-	DIR_EAST = 1,
-	DIR_NORTH = 2,
-	DIR_WEST = 3
-} dir_t;
+typedef enum { DIR_SOUTH = 0, DIR_EAST = 1, DIR_NORTH = 2, DIR_WEST = 3 } dir_t;
 
 /* Screen */
 typedef enum {
-	SCREEN_TL = 0,
-	SCREEN_TM = 1,
-	SCREEN_TR = 2,
-	SCREEN_ML = 3,
-	SCREEN_M = 4,
-	SCREEN_MR = 5,
-	SCREEN_BL = 6,
-	SCREEN_BM = 7,
-	SCREEN_BR = 8
+  SCREEN_TL = 0,
+  SCREEN_TM = 1,
+  SCREEN_TR = 2,
+  SCREEN_ML = 3,
+  SCREEN_M = 4,
+  SCREEN_MR = 5,
+  SCREEN_BL = 6,
+  SCREEN_BM = 7,
+  SCREEN_BR = 8
 } screen_t;
 
 /* Player Data*/
 typedef struct {
-		u8 x, y;    /* Current Location (Pixels) */
-		u8 px, py;  /* Previous Location (Pixels) */
-		u8 sx, sy;  /* Clipping Location (Grid)  */
-		dir_t dir;  /* Current Direction */
-		u8 frame;   /* Current Animation Frame */
-		u8 *bb_pos; /* Screen Address of Player Sprite on Back Buffer */
-		u8 s_idx;   /* Sprite Index */
+  u8 x, y;    /* Current Location (Pixels) */
+  u8 px, py;  /* Previous Location (Pixels) */
+  u8 sx, sy;  /* Clipping Location (Grid)  */
+  dir_t dir;  /* Current Direction */
+  u8 frame;   /* Current Animation Frame */
+  u8 *bb_pos; /* Screen Address of Player Sprite on Back Buffer */
+  u8 s_idx;   /* Sprite Index */
 } player_t;
 
 /* Game Data*/
 typedef struct {
-		screen_t screen; /* Current Screen */
-		u32 score;	 /* Current Score */
-		u16 max_hp;	 /* Maximum Health */
-		u16 hp;		 /* Current Health */
-		u8 level;	 /* Current Level */
-		u8 keys;	 /* Current Number of Keys */
-		u8 bombs;	 /* Current Number of Bombs */
-		u8 artefacts;	 /* Current Number of Artefacts */
+  screen_t screen; /* Current Screen */
+  u32 score;       /* Current Score */
+  u16 max_hp;      /* Maximum Health */
+  u16 hp;          /* Current Health */
+  u8 level;        /* Current Level */
+  u8 keys;         /* Current Number of Keys */
+  u8 bombs;        /* Current Number of Bombs */
+  u8 artefacts;    /* Current Number of Artefacts */
 } game_t;

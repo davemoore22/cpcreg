@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ static const char *const i_strings[3][17] = {{
                                                  " for your uncle, mr",
                                                  "weems, who has been",
                                                  "  kidnapped by the ",
-                                                 "  sex vampires and ",
+                                                 "  she vampires and ",
                                                  "their foul minions!",
                                                  "",
                                                  "  armed with your  ",

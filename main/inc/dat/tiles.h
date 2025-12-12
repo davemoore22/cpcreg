@@ -147,3 +147,11 @@ extern const u8 regina_m_16x16_08[4 * 16];
 extern const u8 weems_m_24x24_03[6 * 24];
 extern const u8 weems_m_24x24_04[6 * 24];
 extern const u8 weems_m_24x24_05[6 * 24];
+
+// extern const u8 map_m_8x8_00[2 * 8];
+// extern const u8 map_m_8x8_01[2 * 8];
+// extern const u8 map_m_8x8_02[2 * 8];
+// extern const u8 map_m_8x8_03[2 * 8];
+// extern const u8 map_m_8x8_04[2 * 8];
+// extern const u8 map_m_8x8_05[2 * 8];
+// extern const u8 map_m_8x8_06[2 * 8];

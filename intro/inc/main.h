@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -43,5 +43,3 @@
 #include "presents.h"
 #include "story.h"
 #include "titles.h"
-
-extern bool pg;

@@ -25,7 +25,7 @@ static void between_draw(void);
 static void between_interrupt(void);
 
 /* Start a Transition "Between" Screen */
-void between_start() {
+void between_start(void) {
 
 	/* Clear the Screen */
 	video_blank_screen();

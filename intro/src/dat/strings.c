@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -20,16 +20,6 @@
 
 /* Game Strings */
 const char *const g_strings[] = {
-
-    /* Title Screen Scroller */
-    "                             REGINALD AND THE SEX VAMPIRES "
-    "(C) DAVE MOORE 2025. PUBLISHED BY "
-    "TYPHONSOFT (TYPHONSOFT.ITCH.IO). CODE AND GFX BY DAVE MOORE. "
-    "MUSIC BY FENYX KELL. BASED UPON MR WEEMS AND THE SHE-"
-    "VAMPIRES BY SIMON DUNSTAN, (C) PIRANHA 1987. PRESS ANY KEY TO "
-    "CONTINUE...                             "};
-
-const char *const g_strings_pg[] = {
 
     /* Title Screen Scroller */
     "                             REGINALD AND THE SHE VAMPIRES "

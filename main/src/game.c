@@ -1382,10 +1382,28 @@ static bool game_handle_tile_on_entry(
 
 	/* Check for foreground objects */
 
-	/* Jar (solid, cannot pass, need to shoot) */
+	/* Jar: now walkable but breaks, causes minor damage */
 	if (IS_JAR(fg)) {
+
+		video_flash_border(TRIPLET_RED);
 		game_maybe_hint(HINT_BUMP_JAR);
-		return false;
+
+		/* Apply damage */
+		game_take_damage(50);
+		g_game.score += 50;
+		game_update_health_string();
+		events->health_updated = true;
+		events->redraw_hud = true;
+
+		/* Remove jar tile */
+		g_level_fg[idx] = 0;
+
+		/* Mark for redraw */
+		video_mark_dirty_tile(gx, gy);
+		events->dirtied_tiles = true;
+
+		/* Movement is allowed */
+		return true;
 	}
 
 	/* Doors */
@@ -1480,8 +1498,8 @@ static bool game_check_landing_tile(u8 fg, u8 bg) {
 	if (!IS_WALKABLE(bg))
 		return false;
 
-	if (IS_JAR(fg))
-		return false;
+	// if (IS_JAR(fg))
+	//	return false;
 
 	if (IS_GRAVE(fg))
 		return false;

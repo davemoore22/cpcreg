@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -68,18 +68,9 @@ void titles_start(void) {
     /* Do scrolling text */
     if (g_clock.ms % 100 == 0) {
 
-      if (!pg) {
-        utils_rotate_str_fixed(g_strings[SCROLLING_TITLE_TEXT], 1,
-                               scroller_size);
-        utils_str_cpy_n(t_scroller, g_strings[SCROLLING_TITLE_TEXT], 40);
-        video_print(t_scroller, 0, 192);
-      } else {
-
-        utils_rotate_str_fixed(g_strings_pg[SCROLLING_TITLE_TEXT], 1,
-                               scroller_size);
-        utils_str_cpy_n(t_scroller, g_strings_pg[SCROLLING_TITLE_TEXT], 40);
-        video_print(t_scroller, 0, 192);
-      }
+      utils_rotate_str_fixed(g_strings[SCROLLING_TITLE_TEXT], 1, scroller_size);
+      utils_str_cpy_n(t_scroller, g_strings[SCROLLING_TITLE_TEXT], 40);
+      video_print(t_scroller, 0, 192);
     }
   }
 
@@ -101,16 +92,10 @@ void titles_stop(void) {
 static void titles_draw(void) {
 
   /* Decompresse image data from a compressed file onto the screen */
-  if (!pg)
-    utils_load("TITLE   SCR", VIDEO_MEM_START);
-  else
-    utils_load("PGTITLE SCR", VIDEO_MEM_START);
+  utils_load("TITLE   SCR", VIDEO_MEM_START);
 
   /* Setup Initial Scroll Text */
-  if (!pg)
-    utils_str_cpy_n(t_scroller, g_strings[SCROLLING_TITLE_TEXT], 40);
-  else
-    utils_str_cpy_n(t_scroller, g_strings_pg[SCROLLING_TITLE_TEXT], 40);
+  utils_str_cpy_n(t_scroller, g_strings[SCROLLING_TITLE_TEXT], 40);
   video_print(t_scroller, 0, 192);
 }
 
