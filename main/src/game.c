@@ -266,7 +266,7 @@ static void game_reset_game(void) {
 	bool options_text = g_options & OPT_TEXT;
 
 	/* Initial values */
-	g_game.level = 0; /* Starting level */
+	g_game.level = 1; /* Starting level */
 	g_game.score = 0;
 	g_game.max_hp = 2000;
 	g_game.health = g_game.max_hp;
