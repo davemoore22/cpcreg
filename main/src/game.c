@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -91,6 +91,8 @@ static void game_update_bomb_string(void);
 static void game_update_keys_string(void);
 static void game_do_pause(void);
 inline void game_maybe_hint(u8 h);
+static void game_draw_pause(void);
+static void game_undraw_pause(void);
 
 static inline u16 game_get_screen_xy(u8 x, u8 y) {
 
@@ -107,7 +109,7 @@ void game_setup(void) {
 	g_controls[KEY_DOWN] = Key_A;
 	g_controls[KEY_LEFT] = Key_O;
 	g_controls[KEY_RIGHT] = Key_P;
-	g_controls[KEY_PAUSE] = Key_CapsLock;
+	g_controls[KEY_PAUSE] = Key_Control;
 	g_controls[KEY_SHOOT] = Key_Space;
 	g_controls[KEY_BOMB] = Key_B;
 	g_controls[JOY_UP] = Joy0_Up;
@@ -263,10 +265,8 @@ static void game_draw_all(void) {
 
 static void game_reset_game(void) {
 
-	bool options_text = g_options & OPT_TEXT;
-
 	/* Initial values */
-	g_game.level = 1; /* Starting level */
+	g_game.level = 1; /* Starting level - not 0-indexed */
 	g_game.score = 0;
 	g_game.max_hp = 2000;
 	g_game.health = g_game.max_hp;
@@ -283,6 +283,7 @@ static void game_reset_game(void) {
 	game_update_hud_strings();
 
 	/* Reset hints */
+	bool options_text = g_options & OPT_TEXT;
 	cpct_memset(g_game.hints, options_text, HINTS_SZ);
 
 	/* Reset monsters */
@@ -617,9 +618,10 @@ static bool game_play_level(void) {
 
 		/* Pause */
 		if (status & BIT_PAUSE) {
-			video_flash_border(TRIPLET_PURPLE);
+			cpct_setBorder(HW_BRIGHT_WHITE);
+			g_game.hints[PAUSE_HINT_IDX] = true;
 			game_do_pause();
-			video_flash_border(TRIPLET_PURPLE);
+			cpct_setBorder(HW_BLACK);
 			status &= ~BIT_PAUSE;
 			continue;
 		}
@@ -828,6 +830,18 @@ static bool game_try_move_screen(dir_t dir, events_t *events) {
 
 	events->moved_screen = true;
 	return true;
+}
+
+static void game_draw_pause(void) {
+
+	utils_clear_input();
+	video_draw_hint(PAUSE_HINT_IDX);
+}
+
+static void game_undraw_pause(void) {
+
+	video_draw_rect(1, 2, HINT_FRAME_WIDTH, HINT_FRAME_HEIGHT + 1);
+	video_draw_player();
 }
 
 static void game_show_hint(const u8 idx) {
@@ -1589,17 +1603,11 @@ void game_update_player_facing(dir_t newdir) {
 
 static void game_do_pause(void) {
 
-	/* Wait for key release (prevents immediate unpause) */
-	while (cpct_isKeyPressed(g_controls[KEY_PAUSE]))
-		cpct_scanKeyboard_f();
+	game_draw_pause();
 
-	/* Now wait until key is pressed again */
-	while (!cpct_isKeyPressed(g_controls[KEY_PAUSE]))
-		cpct_scanKeyboard_f();
+	utils_wait_for_key(g_controls[KEY_PAUSE]);
 
-	/* And wait for release again, to avoid staying stuck */
-	while (cpct_isKeyPressed(g_controls[KEY_PAUSE]))
-		cpct_scanKeyboard_f();
+	game_undraw_pause();
 }
 
 inline void game_maybe_hint(u8 idx) {

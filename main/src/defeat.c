@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -80,7 +80,7 @@ void defeat_stop(void) {
 static void defeat_draw(void) {
 
 	/* Load and display the Transition Screen */
-	utils_load("GAMEOVERBIN", VIDEO_MEM_START);
+	utils_load("GAMEOVERSCR", VIDEO_MEM_START);
 
 	/* Add the Level Data */
 	v_pen = PEN_3;

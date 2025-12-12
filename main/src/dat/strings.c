@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -24,14 +24,14 @@
 const char *const g_strings[] = {
 
 	/* 0 - 9 */
-	"REGINALD AND THE SEX VAMPIRES",
-	" REGINA AND THE SEX VAMPIRES ",
+	"REGINALD AND THE SHE VAMPIRES",
+	" REGINA AND THE SHE VAMPIRES ",
 	"(C) 2025 DAVE MOORE",
-	"TYPHONSOFT.ITCH.IO",
 	"1. REDEFINE CONTROLS",
 	"2. CHANGE SETTINGS",
 	"3. DISPLAY HISCORES",
 	"4. SWAP HERO",
+	"5. INSTRUCTIONS",
 	"9. PLAY GAME",
 	"0. QUIT",
 	/* 10 - 19 */
@@ -109,9 +109,8 @@ const char *const g_strings[] = {
 	"IT BLOCKS THE WAY!",
 	"YOU DESTROY THE LICH'S",
 	"PHLACTERY! ONWARDS!",
-	"",
-	"",
-	/* 80 - */
-	"REGINALD AND THE SHE VAMPIRES",
-	" REGINA AND THE SHE VAMPIRES ",
+	"GAME PAUSED!",
+	"<CTRL TO CONTINUE>",
+	/* 80 - 81 */
+	"TYPHONSOFT.ITCH.IO",
 };

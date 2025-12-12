@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -50,26 +50,11 @@ void menu_start(void) {
 void menu_draw_from_disc(const bool load_bg) {
 
 	if (load_bg)
-		utils_load("MENU    BIN", VIDEO_MEM_START);
+		utils_load("MENU    SCR", VIDEO_MEM_START);
 
 	video_clear_centre();
 	menu_draw_title();
 	menu_draw_centre();
-}
-
-cpct_keyID menu_get_input(void) {
-
-	static const cpct_keyID keys[6] = {
-		Key_0, Key_1, Key_2, Key_3, Key_4, Key_9};
-
-	cpct_scanKeyboard_f();
-
-	for (u8 i = 0; i < 6; ++i) {
-		if (cpct_isKeyPressed(keys[i]))
-			return keys[i];
-	}
-
-	return Key_Tab; /* nothing pressed */
 }
 
 void menu_stop(void) {
@@ -89,7 +74,7 @@ void menu_draw_centre(void) {
 	u8 x = MENU_X, y = MENU_Y;
 
 	v_pen = PEN_3;
-	for (u8 i = 0; i < 6; ++i) {
+	for (u8 i = 0; i < 7; ++i) {
 		video_print_text(
 			g_strings[MENU_TEXT + i], x, y << LINE_P_H_SHIFT);
 		y += 2;
@@ -98,15 +83,12 @@ void menu_draw_centre(void) {
 	video_print_centred_text(
 		g_strings[ABOUT_TEXT], ABOUT_Y << LINE_P_H_SHIFT);
 	video_print_centred_text(
-		g_strings[ABOUT_TEXT + 1], (ABOUT_Y + 1) << LINE_P_H_SHIFT);
+		g_strings[PUBLISHED_TEXT], (ABOUT_Y + 1) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_2;
-	video_print_centred_text("v1.0.1", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
+	video_print_centred_text("v1.0.2", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_1;
-	u8 *pg_ptr = (u8 *)0xA601;
-	if (*pg_ptr == 255)
-		video_print_text("PG", 66, EXTENDED_Y << LINE_P_H_SHIFT);
 }
 
 void menu_interrupt(void) {
@@ -120,7 +102,7 @@ void menu_interrupt(void) {
 		{HW_BLACK, HW_RED, HW_BRIGHT_RED, HW_PASTEL_BLUE}};
 
 	if (v_int_idx == 4)
-		utils_wait(54);
+		utils_wait(58);
 
 	cpct_setPalette(palette[v_int_idx], sizeof(palette[v_int_idx]));
 
@@ -263,8 +245,10 @@ cpct_keyID menu_poll_input(void) {
 		return Key_3;
 	if (cpct_isKeyPressed(Key_4))
 		return Key_4;
-	// if (cpct_isKeyPressed(Key_Tab))
-	//	return Key_Tab;
+	if (cpct_isKeyPressed(Key_5))
+		return Key_5;
+	if (cpct_isKeyPressed(Key_Tab))
+		return Key_Tab;
 	if (cpct_isKeyPressed(Key_9))
 		return Key_9;
 

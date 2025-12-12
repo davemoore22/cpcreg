@@ -18,17 +18,14 @@
 
 #pragma codeseg CODE
 
-#include "welldone.h"
+#include "explain.h"
 
 /* Private Functions */
-static void welldone_draw(void);
-static void welldone_interrupt(void);
+static void explain_draw(void);
+static void explain_interrupt(void);
 
-/* Start a Transition "Welldone" Screen */
-void welldone_start(void) {
-
-	u16 duration;
-	bool kp = false;
+/* Start a Transition "Between" Screen */
+void explain_start(void) {
 
 	/* Clear the Screen */
 	video_blank_screen();
@@ -38,22 +35,24 @@ void welldone_start(void) {
 	g_clock_on = false;
 
 	/* Draw Screen */
-	welldone_draw();
+	explain_draw();
 
 	/* Set up Clock Interrupt */
 	g_clock_on = false;
 	utils_reset_clock();
 	video_reset_timers();
 	cpct_waitVSYNC();
-	cpct_setInterruptHandler(welldone_interrupt);
+	v_int_idx = 0;
+	cpct_setInterruptHandler(explain_interrupt);
 
 	/* Start Clock */
-	duration = 5;
+	u16 duration = 30;
 	g_clock_on = true;
 
 	utils_clear_input();
 
 	/* Display for a number of seconds or until a keypress */
+	bool kp = false;
 	while ((!kp) && (g_clock.s < duration)) {
 
 		cpct_waitVSYNC();
@@ -69,38 +68,31 @@ void welldone_start(void) {
 }
 
 /* Stop the Transition "Between" Screen */
-void welldone_stop(void) {
+void explain_stop(void) {
 
 	cpct_removeInterruptHandler();
+	video_blank_screen();
+
 	utils_reset_clock();
 }
 
 /* Draw the Grid Graphic */
-static void welldone_draw(void) {
+static void explain_draw(void) {
 
-	char level_str[2];
-
-	level_str[0] = '0' + g_game.level;
-	level_str[1] = '\0';
+	static const u8 palette_e[4] = {
+		HW_BLACK,
+		HW_RED,
+		HW_BRIGHT_RED,
+		HW_PASTEL_YELLOW,
+	};
 
 	/* Load and display the Transition Screen */
-	utils_load("WELLDONESCR", VIDEO_MEM_START);
+	utils_load("EXPLAIN SCR", VIDEO_MEM_START);
 
-	v_pen = PEN_3;
-	video_print_centred_text("Level Complete!", INBETWEEN_Y * LINE_P_H);
+	cpct_setPalette(palette_e, sizeof(palette_e));
 }
 
-static void welldone_interrupt(void) {
-
-	/* Data for Colour Rasters */
-	static const u8 palette_mc[6][4] = {
-		{HW_BLACK, HW_RED, HW_BRIGHT_RED, HW_ORANGE},
-		{HW_BLACK, HW_RED, HW_BRIGHT_RED, HW_ORANGE},
-		{HW_BLACK, HW_RED, HW_BRIGHT_RED, HW_ORANGE},
-		{HW_BLACK, HW_RED, HW_BRIGHT_RED, HW_ORANGE},
-		{HW_BLACK, HW_RED, HW_BRIGHT_RED, HW_BRIGHT_WHITE},
-		{HW_BLACK, HW_RED, HW_BRIGHT_RED, HW_BRIGHT_WHITE},
-	};
+static void explain_interrupt(void) {
 
 	if (v_int_idx == 0) {
 		if (++v_frame_c == FC_MAX)
@@ -109,9 +101,6 @@ static void welldone_interrupt(void) {
 
 	if (v_int_idx == 2)
 		cpct_scanKeyboard_if();
-
-	/* Adjust Raster Positions */
-	cpct_setPalette(palette_mc[v_int_idx], sizeof(palette_mc[v_int_idx]));
 
 	if (++v_int_idx == 6)
 		v_int_idx = 0;

@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ extern bool m_menu_input_enabled;
 /* Public Functions */
 void menu_start(void);
 void menu_draw_from_disc(const bool load_bg);
-cpct_keyID menu_get_input(void);
 void menu_stop(void);
 void menu_interrupt(void);
 void menu_draw_centre(void);

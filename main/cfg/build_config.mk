@@ -50,7 +50,7 @@
 #   and Z80 memory location where code will start in the generated binary
 PROJNAME   := regmain
 Z80CODELOC := 0x0500
-Z80DATALOC := 0x6680
+Z80DATALOC := 0x6800
 ##
 ## Folders 
 ##

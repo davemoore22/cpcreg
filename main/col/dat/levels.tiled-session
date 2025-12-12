@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level5-bg.tmx",
+    "activeFile": "level1.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -704,12 +704,11 @@
     "map.tileWidth": 16,
     "map.width": 16,
     "openFiles": [
-        "5-11-bg.tmx",
-        "level5-fg.tmx",
-        "level5-bg.tmx"
+        "level1.tmx"
     ],
     "project": "levels.tiled-project",
     "recentFiles": [
+        "level1.tmx",
         "5-11-bg.tmx",
         "level5-fg.tmx",
         "level5-bg.tmx",
@@ -720,8 +719,7 @@
         "5-8-bg.tmx",
         "5-6-bg.tmx",
         "5-5-bg.tmx",
-        "5-4-bg.tmx",
-        "5-3-bg.tmx"
+        "5-4-bg.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

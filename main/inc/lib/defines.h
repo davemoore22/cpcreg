@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -125,7 +125,7 @@
 #define TITLE_TEXT_REGINALD 0
 #define TITLE_TEXT_REGINA 1
 #define ABOUT_TEXT 2
-#define MENU_TEXT 4
+#define MENU_TEXT 3
 #define REDEFINE_SUBTITLE 10
 #define KEYS_START 11
 #define NON_ASCII_KEYS_START 18
@@ -146,6 +146,7 @@
 #define GAME_OVER_TEXT 42
 #define CONGRATS_TEXT 43
 #define INITIALS_TEXT 46
+#define PUBLISHED_TEXT 80
 
 /* Array Sizes */
 #define CONTROLS_SZ 13
@@ -155,10 +156,12 @@
 #define KEY_MAPPING_REDEFINE_SZ 32
 #define CONNECTIONS_SZ 42
 #define LEVELS_SZ 12
-#define HINTS_SZ 14
+#define HINTS_SZ 15
 #define DIRTY_TILES_SZ 64
 
 #define FINAL_LEVEL 2
+
+#define PAUSE_HINT_IDX 14
 
 /* Settings */
 #define OPT_CHARACTER 0x01
@@ -210,6 +213,7 @@
 #define BIT_QUIT 2
 #define BIT_SUCCESS 4
 #define BIT_INPUT 8
+#define BIT_EXPLAIN 16
 
 /* Edge Bits */
 #define BIT_TOP 1

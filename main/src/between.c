@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ static void between_draw(void);
 static void between_interrupt(void);
 
 /* Start a Transition "Between" Screen */
-void between_start(void) {
+void between_start() {
 
 	/* Clear the Screen */
 	video_blank_screen();
@@ -77,7 +77,7 @@ void between_stop(void) {
 static void between_draw(void) {
 
 	/* Load and display the Transition Screen */
-	utils_load("GETREADYBIN", VIDEO_MEM_START);
+	utils_load("GETREADYSCR", VIDEO_MEM_START);
 
 	char level_str[] = "LEVEL 0";
 	level_str[6] = '0' + g_game.level;

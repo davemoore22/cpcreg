@@ -20,21 +20,6 @@
 
 #include "main.h"
 
-/* Fixed Memory Data Areas */
-__at(DISK_TABLE_LOC) extern u8 g_disk_table[256];
-
-/* Mask Table */
-cpctm_declareMaskTable(v_mask_table);
-
-/* FDC Tools SDCC4.5 (via https://www.julien-nevo.com/arkos/fdc-tools/) */
-
-#ifdef __INTELLISENSE__
-#pragma diag_suppress 130
-#endif
-extern void asm_load_file(
-	u8 *fileName, u8 *destBuffer, u8 *sectorTable) __z88dk_callee;
-#ifdef __INTELLISENSE__
-#pragma diag_default 130
-#endif
-extern void asm_fdc_off(void);
-extern void asm_fdc_on(void);
+/* Public Functions */
+void explain_start(void);
+void explain_stop(void);

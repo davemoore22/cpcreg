@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -141,11 +141,6 @@ void video_draw_title(const u8 y) {
 	u8 title_text_idx = g_options & OPT_CHARACTER ? TITLE_TEXT_REGINALD
 						      : TITLE_TEXT_REGINA;
 
-	if (*pg_ptr == 255)
-		title_text_idx = g_options & OPT_CHARACTER
-					 ? TITLE_TEXT_REGINALD + 80
-					 : TITLE_TEXT_REGINA + 80;
-
 	/* As LINE_P_H is 8, we can shift by 3 instead of multiplying by 8 */
 	v_pen = PEN_NO_RECOLOUR;
 
@@ -220,7 +215,7 @@ void video_print_text(const char *str, const u8 x, const u8 y) {
 /* Draw In-Game GUI */
 void video_draw_GUI(void) {
 
-	utils_load("HUD     BIN", VIDEO_MEM_START);
+	utils_load("HUD     SCR", VIDEO_MEM_START);
 }
 
 void video_clear_HUD(void) {

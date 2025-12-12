@@ -1,5 +1,5 @@
 /*
- * Reginald and the Sex Vampires for the Amstrad CPC
+ * Reginald and the She Vampires for the Amstrad CPC
  * Copyright (C) 2025 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
@@ -132,7 +132,7 @@ static void victory_reset_colours(bool which) {
 
 static void victory_draw(void) {
 
-	utils_load("VICTORY BIN", VIDEO_MEM_START);
+	utils_load("VICTORY SCR", VIDEO_MEM_START);
 }
 
 static void victory_interrupt(void) {
