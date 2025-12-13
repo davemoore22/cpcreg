@@ -1,3 +1,5 @@
+ .area _DATA
+
 ;; File 'out/l_level_5_fg.s' generated using cpct_pack
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'out/level5-fg.bin' ]

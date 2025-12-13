@@ -41,6 +41,9 @@ static const u8 *v_gui_start;
 
 /* Private Functions */
 static void video_init_hint_tiles(void);
+static void video_draw_frame(u8 start_x, u8 start_y, u8 w_tiles, u8 h_tiles);
+static void video_draw_hint_text(
+	u8 hint_id, u8 start_x, u8 start_y, u8 w_tiles, u8 h_tiles);
 
 /* Initialise Video and Clear the Screen */
 void video_init(void) {
@@ -309,85 +312,21 @@ void video_draw_rect(u8 tx, u8 ty, u8 tw, u8 th) {
 /* Draw a centred hint (these params include corners and are in tile units) */
 void video_draw_hint(const u8 hint_id) {
 
-	u8 *v_pos, *row_start;
-	u8 w = HINT_FRAME_WIDTH;
-	u8 h = HINT_FRAME_HEIGHT;
-	u8 i, rows;
-	u16 offs;
-	u8 bytes_w = w << 2; /* tiles * 4 bytes */
-	u8 bytes_h = h << 4; /* tiles * 16 bytes */
-	u8 start_x = (80 - bytes_w) >> 1;
+	const u8 w = HINT_FRAME_WIDTH;
+	const u8 h = HINT_FRAME_HEIGHT;
+
+	/* Compute centering in bytes then convert back to tiles */
+	u8 bytes_w = w << 2;
+	u8 bytes_h = h << 4;
+
+	u8 start_x = (80 - bytes_w) >> 1; // in bytes
 	u8 start_y = ((200 - bytes_h) >> 1) + FRAME_V_OFFSET;
-	u8 base = HINT_TEXT_START + (hint_id << 1);
 
-	/* Top-left vpos */
-	row_start = cpct_getScreenPtr(CPCT_VMEM_START, start_x, start_y);
-	v_pos = row_start;
+	u8 tile_x = start_x >> 2;
+	u8 tile_y = start_y >> 4;
 
-	/* TL */
-	cpct_drawSprite(frame_tile[FT_TL], v_pos, TILE_B_W, TILE_B_H);
-	v_pos += TILE_STEP_X;
-
-	/* TM tiles */
-	for (i = 0; i < w - 2; i++) {
-		cpct_drawSprite(frame_tile[FT_TM], v_pos, TILE_B_W, TILE_B_H);
-		v_pos += TILE_STEP_X;
-	}
-
-	/* TR */
-	cpct_drawSprite(frame_tile[FT_TR], v_pos, TILE_B_W, TILE_B_H);
-
-	/* Note TILE_STEP_X is 4 so we can shift by 2 instead */
-	v_pos = row_start + TILE_STEP_Y;
-	for (i = 0; i < h - 2; i++) {
-		cpct_drawSprite(frame_tile[FT_MR], v_pos + ((w - 1) << 2),
-			TILE_B_W, TILE_B_H);
-		v_pos += TILE_STEP_Y;
-	}
-
-	/*
-	 * We have optmised out the following to use shifts instead:
-	 * row_start += (h - 1) * TILE_STEP_Y;
-	 */
-	rows = (h - 1);
-	offs = (rows << 7) + (rows << 5);
-	row_start += offs;
-
-	v_pos = row_start + ((w - 1) << 2);
-
-	/* BR */
-	cpct_drawSprite(frame_tile[FT_BR], v_pos, TILE_B_W, TILE_B_H);
-	v_pos -= TILE_STEP_X;
-
-	/* BM tiles */
-	for (i = 0; i < w - 2; i++) {
-		cpct_drawSprite(frame_tile[FT_BM], v_pos, TILE_B_W, TILE_B_H);
-		v_pos -= TILE_STEP_X;
-	}
-
-	/* BL */
-	cpct_drawSprite(frame_tile[FT_BL], v_pos, TILE_B_W, TILE_B_H);
-
-	v_pos = row_start - TILE_STEP_Y;
-	for (i = 0; i < h - 2; i++) {
-		cpct_drawSprite(frame_tile[FT_ML], v_pos, TILE_B_W, TILE_B_H);
-		v_pos -= TILE_STEP_Y;
-	}
-
-	/* Clear centre */
-	{
-		u8 *inner_pos = cpct_getScreenPtr(
-			CPCT_VMEM_START, start_x + 4, start_y + 16);
-
-		cpct_drawSolidBox(inner_pos, 0, /* colour */
-			(w - 2) << 2,		/* bytes width  */
-			(h - 2) << 4);		/* bytes height */
-	}
-	/* Draw Hint Text */
-	v_pen = PEN_3;
-
-	video_print_centred_text(g_strings[base], 96 + FRAME_V_OFFSET - 8);
-	video_print_centred_text(g_strings[base + 1], 96 + FRAME_V_OFFSET + 8);
+	video_draw_frame(tile_x, tile_y, w, h);
+	video_draw_hint_text(hint_id, tile_x, tile_y, w, h);
 }
 
 /* Set tile as dirty */
@@ -572,4 +511,75 @@ void video_flash_border(u8 c0, u8 c1, u8 c2) {
 
 	cpct_setBorder(HW_BLACK);
 	utils_wait(1000);
+}
+
+/* Draws only the frame (corners + edges) at tile coords (x,y) */
+static void video_draw_frame(u8 start_x, u8 start_y, u8 w_tiles, u8 h_tiles) {
+
+	u8 *row_start =
+		cpct_getScreenPtr(CPCT_VMEM_START, start_x << 2, start_y << 4);
+	u8 *v = row_start;
+
+	/* --- Top Row --- */
+	cpct_drawSprite(frame_tile[FT_TL], v, TILE_B_W, TILE_B_H);
+	v += TILE_STEP_X;
+
+	for (u8 i = 0; i < w_tiles - 2; i++) {
+		cpct_drawSprite(frame_tile[FT_TM], v, TILE_B_W, TILE_B_H);
+		v += TILE_STEP_X;
+	}
+
+	cpct_drawSprite(frame_tile[FT_TR], v, TILE_B_W, TILE_B_H);
+
+	/* --- Middle Rows: Right edges --- */
+	v = row_start + TILE_STEP_Y;
+	for (u8 i = 0; i < h_tiles - 2; i++) {
+		cpct_drawSprite(frame_tile[FT_MR], v + ((w_tiles - 1) << 2),
+			TILE_B_W, TILE_B_H);
+		v += TILE_STEP_Y;
+	}
+
+	/* --- Bottom Row --- */
+	row_start += ((h_tiles - 1) << 7) +
+		     ((h_tiles - 1) << 5); // (h-1)*128 + (h-1)*32
+	v = row_start + ((w_tiles - 1) << 2);
+
+	cpct_drawSprite(frame_tile[FT_BR], v, TILE_B_W, TILE_B_H);
+	v -= TILE_STEP_X;
+
+	for (u8 i = 0; i < w_tiles - 2; i++) {
+		cpct_drawSprite(frame_tile[FT_BM], v, TILE_B_W, TILE_B_H);
+		v -= TILE_STEP_X;
+	}
+
+	cpct_drawSprite(frame_tile[FT_BL], v, TILE_B_W, TILE_B_H);
+
+	/* --- Middle Rows: Left edges --- */
+	v = row_start - TILE_STEP_Y;
+	for (u8 i = 0; i < h_tiles - 2; i++) {
+		cpct_drawSprite(frame_tile[FT_ML], v, TILE_B_W, TILE_B_H);
+		v -= TILE_STEP_Y;
+	}
+}
+
+/* Clears centre area + prints the 2 lines of hint text */
+void video_draw_hint_text(
+	u8 hint_id, u8 start_x, u8 start_y, u8 w_tiles, u8 h_tiles) {
+
+	/* Clear the interior */
+	u8 *inner = cpct_getScreenPtr(
+		CPCT_VMEM_START, (start_x + 1) << 2, (start_y + 1) << 4);
+
+	cpct_drawSolidBox(inner, 0, (w_tiles - 2) << 2, (h_tiles - 2) << 4);
+
+	/* Draw text */
+	v_pen = PEN_3;
+
+	u8 base = HINT_TEXT_START + (hint_id << 1);
+
+	/* Centre Y coordinate of frame */
+	u8 centre_y = ((start_y << 4) + ((h_tiles << 4) >> 1));
+
+	video_print_centred_text(g_strings[base], centre_y - 12);
+	video_print_centred_text(g_strings[base + 1], centre_y + 4);
 }

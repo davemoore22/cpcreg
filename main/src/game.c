@@ -872,7 +872,7 @@ static void game_show_hint(const u8 idx) {
 	g_game.hints[idx] = false;
 
 	/* Redraw as needed */
-	video_draw_rect(1, 2, HINT_FRAME_WIDTH, HINT_FRAME_HEIGHT + 1);
+	video_draw_rect(1, 1, HINT_FRAME_WIDTH, HINT_FRAME_HEIGHT + 2);
 	video_draw_player();
 }
 

@@ -1,3 +1,5 @@
+ .area _DATA
+
 ;; File 'out/l_level_4_fg.h.s' generated using cpct_pack
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'out/level4-fg.bin' ]

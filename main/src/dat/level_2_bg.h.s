@@ -1,3 +1,5 @@
+ .area _DATA
+
 ;; File 'out/level_2_0_bg.h.s' generated using cpct_pack
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'out/2-0-bg.bin' ]
