@@ -1,6 +1,6 @@
 /*
  * Reginald and the She Vampires for the Amstrad CPC
- * Copyright (C) 2025 Dave Moore
+ * Copyright (C) 2026 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,8 @@ static const u8 *victory_regina_frame(u8 idx);
 
 void menu_start(void) {
 
+	cpct_akp_musicInit(g_music);
+
 	video_reset_timers();
 	cpct_waitVSYNCStart();
 	cpct_setInterruptHandler(menu_interrupt);
@@ -60,6 +62,7 @@ void menu_draw_from_disc(const bool load_bg) {
 void menu_stop(void) {
 
 	/* Only when leaving for the game do we actually clear */
+	cpct_akp_stop();
 	cpct_removeInterruptHandler();
 	video_full_clear();
 }
@@ -86,7 +89,7 @@ void menu_draw_centre(void) {
 		g_strings[PUBLISHED_TEXT], (ABOUT_Y + 1) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_2;
-	video_print_centred_text("v1.0.2", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
+	video_print_centred_text("v1.0.3", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_1;
 }
@@ -111,6 +114,10 @@ void menu_interrupt(void) {
 
 	if (v_int_idx == 0 && m_toggle_cooldown > 0)
 		--m_toggle_cooldown;
+
+	/* Play Music */
+	// if (v_int_idx == 4)
+	//	cpct_akp_musicPlay();
 
 	if (++v_int_idx == 6)
 		v_int_idx = 0;
@@ -247,7 +254,7 @@ cpct_keyID menu_poll_input(void) {
 		return Key_4;
 	if (cpct_isKeyPressed(Key_5))
 		return Key_5;
-	if (cpct_isKeyPressed(Key_Tab))
+	if (cpct_isKeyPressed(Key_Tab) && (g_options & OPT_CHEAT))
 		return Key_Tab;
 	if (cpct_isKeyPressed(Key_9))
 		return Key_9;

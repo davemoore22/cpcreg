@@ -1,6 +1,6 @@
 /*
  * Reginald and the She Vampires for the Amstrad CPC
- * Copyright (C) 2025 Dave Moore
+ * Copyright (C) 2026 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,7 +176,9 @@ const u8 l_minimap_masks[6][12] = {
 	0x0B},
 {0x00, 0x06, 0x08, 0x04, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00},
-};*/
+};
+
+*/
 
 /* Screen Connections (format is N, S, E, W then Screens 0 to 11) */
 const u8 l_next_screen[6][4][12] = {

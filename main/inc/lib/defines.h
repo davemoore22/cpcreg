@@ -1,6 +1,6 @@
 /*
  * Reginald and the She Vampires for the Amstrad CPC
- * Copyright (C) 2025 Dave Moore
+ * Copyright (C) 2026 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,19 +33,20 @@
 #define MASK_TABLE_LOC 0x0200 /* 0x0100 bytes long */
 #define DISK_TABLE_LOC 0x0300 /* 0x0100 bytes long */
 #define CODE_START_LOC 0x0480 /* See build_config.mk */
-#define DATA_START_LOC 0x6680 /* See build_config.mk */
-
+#define DATA_START_LOC 0x67A0 /* See build_config.mk */
 #define VIDEO_MEM_START ((u8 *)0xC000)
 #define VIDEO_MEM_END ((void *)0xFFFF)
 #define VIDEO_MEM_SIZE ((u8)0x4000)
+#define MUSIC_START ((u8 *)0xB000)
 
 /* Run time storage for level data */
-#define g_level_fg ((u8 *)0xA620)
+#define g_level_fg ((u8 *)0xA6A0)
 #define g_level_fg_sz LEVEL_SCRS * SCREEN_U_W * SCREEN_U_H
-#define g_screen_bg ((u8 *)0xAD20)
+#define g_screen_bg ((u8 *)0xADA0)
 #define g_screen_bg_sz 16 * 9
-#define g_temp_bg ((u8 *)0xAE20)
+#define g_temp_bg ((u8 *)0xAEA0)
 #define g_temp_bg_sz 16 * 9
+#define g_music ((u8 *)0xB000)
 
 #define KEY_NONE 0xFF
 

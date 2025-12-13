@@ -1,6 +1,6 @@
 /*
  * Reginald and the She Vampires for the Amstrad CPC
- * Copyright (C) 2025 Dave Moore
+ * Copyright (C) 2026 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,8 @@ void start(void) {
 
 	/* Initial draw whilst blanked */
 	menu_draw_from_disc(true);
+
+	utils_load("MUSIC   BIN", MUSIC_START);
 
 	menu_start();
 

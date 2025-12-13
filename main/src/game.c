@@ -618,7 +618,7 @@ static bool game_play_level(void) {
 
 		/* Pause */
 		if (status & BIT_PAUSE) {
-			cpct_setBorder(HW_BRIGHT_WHITE);
+			cpct_setBorder(HW_WHITE);
 			g_game.hints[PAUSE_HINT_IDX] = true;
 			game_do_pause();
 			cpct_setBorder(HW_BLACK);
@@ -840,7 +840,7 @@ static void game_draw_pause(void) {
 
 static void game_undraw_pause(void) {
 
-	video_draw_rect(1, 2, HINT_FRAME_WIDTH, HINT_FRAME_HEIGHT + 1);
+	video_draw_rect(0, 0, 16, 9);
 	video_draw_player();
 }
 

@@ -69,7 +69,7 @@
 ;
 ;
 ;; Adaptation for CPCTelera by Christophe Kohler and Arnaud Bouche (@Arnaud6128)
-;; 07/2025 Fix loading TABSECTS in DE
+;; 07/2026 Fix loading TABSECTS in DE
 
 .equ DIRFSECT,0xC1
 .equ NBMAXENT,4

@@ -1,6 +1,6 @@
 /*
  * Reginald and the She Vampires for the Amstrad CPC
- * Copyright (C) 2025 Dave Moore
+ * Copyright (C) 2026 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ const char *const g_strings[] = {
 	/* 0 - 9 */
 	"REGINALD AND THE SHE VAMPIRES",
 	" REGINA AND THE SHE VAMPIRES ",
-	"(C) 2025 DAVE MOORE",
+	"(C) 2026 DAVE MOORE",
 	"1. REDEFINE CONTROLS",
 	"2. CHANGE SETTINGS",
 	"3. DISPLAY HISCORES",

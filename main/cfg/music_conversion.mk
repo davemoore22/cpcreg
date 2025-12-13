@@ -29,6 +29,24 @@
 
 # Default values
 #$(eval $(call AKS2DATA, SET_FOLDER   , src/ ))
+#$(eval $(call AKS2DATA, SET_OUTPUTS  , s    )) # { bin, s }
+#$(eval $(call AKS2DATA, SET_PLAYER   , akg  )) # { akg, akm, fx }
+#$(eval $(call AKS2DATA, SET_EXTRAPAR ,      )) 
+# Conversion
+#$(eval $(call AKS2DATA, EXECUTE , )) # must be set before last song
+#$(eval $(call AKS2DATA, CONVERT      , music.aks , name , mem_address )) # mem_adress only for bin output
+$(eval $(call AKS2DATA, SET_PLAYER , akg ))
+$(eval $(call AKS2DATA, SET_FOLDER   , out/ ))
+$(eval $(call AKS2DATA, SET_OUTPUTS  , bin  )) 
+#$(eval $(call AKS2DATA, CONVERT , sfx/music.sks , music , 0xB000))
+
+#$(eval $(call AKS2DATA, SET_PLAYER , fx )) 
+#$(eval $(call AKS2DATA, EXECUTE , )) # must be set before last song
+#$(eval $(call AKS2DATA, CONVERT , music/sfx.aks , effects ,  ))
+
+
+# Default values
+#$(eval $(call AKS2DATA, SET_FOLDER   , src/ ))
 #$(eval $(call AKS2DATA, SET_OUTPUTS  , h s  )) { bin, h, hs, s }
 #$(eval $(call AKS2DATA, SET_SFXONLY  , no   )) { yes, no       }
 #$(eval $(call AKS2DATA, SET_EXTRAPAR ,      )) 
