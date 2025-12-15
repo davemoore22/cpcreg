@@ -145,6 +145,9 @@ static void victory_interrupt(void) {
 	if (v_int_idx == 2)
 		cpct_scanKeyboard_if();
 
+	if (v_int_idx == 4)
+		sfx_update();
+
 	if (++v_int_idx == 6)
 		v_int_idx = 0;
 
@@ -175,6 +178,7 @@ static void victory_fade_to_black(void) {
 				cpct_setBorder(HW_ORANGE);
 				cpct_setPALColour(3, HW_BRIGHT_YELLOW);
 			}
+			sfx_start((void *)sfx_splat);
 		}
 	}
 }
@@ -247,7 +251,7 @@ static void victory_do_return(void) {
 	v_pen = 3;
 	video_print_centred_text("KEEP AN EYE OUT FOR:", 15 * LINE_P_H);
 	video_print_centred_text(
-		"WEEMS 3: REGINA AND THE UNDEAD HIMBOS!", 17 * LINE_P_H);
+		"WEEMS 3: REGINA AND THE HE VAMPIRES!", 17 * LINE_P_H);
 	victory_wait_or_kp();
 	victory_wait_or_kp();
 	video_clear_screen();

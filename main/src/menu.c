@@ -60,6 +60,7 @@ void menu_draw_from_disc(const bool load_bg) {
 void menu_stop(void) {
 
 	/* Only when leaving for the game do we actually clear */
+	sfx_stop();
 	cpct_removeInterruptHandler();
 	video_full_clear();
 }
