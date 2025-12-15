@@ -43,15 +43,19 @@ void settings_start(void) {
 		if (key == Key_1) {
 			g_options ^= OPT_SFX;
 			flash = true;
+			sfx_start((void *)sfx_show_hint);
 		} else if (key == Key_2) {
 			g_options ^= OPT_CHEAT;
+			sfx_start((void *)sfx_show_hint);
 			flash = true;
 		} else if (key == Key_3) {
 			g_options ^= OPT_GREEN_SCREEN;
 			flash = true;
+			sfx_start((void *)sfx_show_hint);
 		} else if (key == Key_4) {
 			g_options ^= OPT_TEXT;
 			flash = true;
+			sfx_start((void *)sfx_show_hint);
 		} else if (key == Key_Esc) {
 			cpct_memset(g_game.hints, options_text, HINTS_SZ);
 			return;

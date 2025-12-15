@@ -39,8 +39,6 @@ static const u8 *victory_regina_frame(u8 idx);
 
 void menu_start(void) {
 
-	cpct_akp_musicInit(g_music);
-
 	video_reset_timers();
 	cpct_waitVSYNCStart();
 	cpct_setInterruptHandler(menu_interrupt);
@@ -62,7 +60,6 @@ void menu_draw_from_disc(const bool load_bg) {
 void menu_stop(void) {
 
 	/* Only when leaving for the game do we actually clear */
-	cpct_akp_stop();
 	cpct_removeInterruptHandler();
 	video_full_clear();
 }
@@ -115,9 +112,8 @@ void menu_interrupt(void) {
 	if (v_int_idx == 0 && m_toggle_cooldown > 0)
 		--m_toggle_cooldown;
 
-	/* Play Music */
-	// if (v_int_idx == 4)
-	//	cpct_akp_musicPlay();
+	if (v_int_idx == 4 && g_options & OPT_SFX)
+		sfx_update();
 
 	if (++v_int_idx == 6)
 		v_int_idx = 0;
@@ -160,6 +156,7 @@ static void menu_step_walker(walker_t *w) {
 	if (old_dir != w->going_down) {
 
 		if (w->going_down) {
+
 			/* SOUTH = frames 3–5 */
 			w->frame = 3;
 		} else {
@@ -219,6 +216,8 @@ void menu_draw_walkers(void) {
 			victory_reginald_frame(reg_walk.frame), x, reg_walk.y);
 
 		reg_walk.drawn = true;
+
+		sfx_start((void *)sfx_footstep);
 	}
 
 	{
@@ -235,6 +234,8 @@ void menu_draw_walkers(void) {
 			x, regina_walk.y);
 
 		regina_walk.drawn = true;
+
+		sfx_start((void *)sfx_footstep);
 	}
 }
 

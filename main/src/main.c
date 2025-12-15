@@ -39,7 +39,7 @@ void start(void) {
 	/* Initial draw whilst blanked */
 	menu_draw_from_disc(true);
 
-	utils_load("MUSIC   BIN", MUSIC_START);
+	// utils_load("MUSIC   BIN", MUSIC_START);
 
 	menu_start();
 

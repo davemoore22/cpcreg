@@ -102,7 +102,7 @@ static inline u16 game_get_screen_xy(u8 x, u8 y) {
 /* Set up Game */
 void game_setup(void) {
 
-	g_options = OPT_CHARACTER | OPT_TEXT;
+	g_options = OPT_CHARACTER | OPT_TEXT | OPT_SFX;
 
 	/* Default Keyboard Controls */
 	g_controls[KEY_UP] = Key_Q;
@@ -238,9 +238,11 @@ void game_interrupt(void) {
 	if (g_int_idx == 1)
 		cpct_scanKeyboard_if();
 
-	/* Adjust raster position */
 	if (g_int_idx == 4)
 		utils_wait(54);
+
+	if (v_int_idx == 2 && (g_options & OPT_SFX))
+		sfx_update();
 
 	if (g_options & OPT_GREEN_SCREEN)
 		cpct_setPalette(palette_mn, sizeof(palette_mn));
@@ -551,6 +553,8 @@ static void game_do_player_move(i8 dx, i8 dy, dir_t dir, events_t *events) {
 
 	/* Movement event (logical move has happened) */
 	events->moved = true;
+
+	sfx_start((void *)sfx_footstep);
 }
 
 /* Main game loop (input → simulate → render) */
@@ -855,6 +859,8 @@ static void game_show_hint(const u8 idx) {
 
 	video_draw_hint(idx);
 
+	sfx_start((void *)sfx_show_hint);
+
 	utils_reset_clock();
 	g_clock_on = true;
 
@@ -931,11 +937,13 @@ static void game_open_door(const i8 dx, const i8 dy) {
 
 	if (IS_HDOOR(tile)) {
 		game_open_horizontal_door(new_x, new_y);
+		sfx_start((void *)sfx_open_door);
 		return;
 	}
 
 	if (IS_VDOOR(tile)) {
 		game_open_vertical_door(new_x, new_y);
+		sfx_start((void *)sfx_open_door);
 		return;
 	}
 }
@@ -1090,6 +1098,8 @@ static void game_fire_bullet(void) {
 	g_bullet.v_pos = cpct_getScreenPtr(CPCT_VMEM_START,
 		GAME_WINDOW_X + g_bullet.byte_x,
 		GAME_WINDOW_Y + g_bullet.byte_y);
+
+	sfx_start((void *)sfx_shoot);
 }
 
 /* Again, needed ChatGPT here to iron out so many bugs */
@@ -1451,6 +1461,7 @@ static bool game_handle_tile_on_entry(
 			video_flash_border(TRIPLET_MAGENTA);
 			game_maybe_hint(HINT_FOUND_KEY);
 			++g_game.keys;
+			sfx_start((void *)sfx_get_item);
 			game_update_hud_strings();
 			break;
 
@@ -1462,12 +1473,14 @@ static bool game_handle_tile_on_entry(
 				g_game.health = 2000;
 			events->health_updated = true;
 			events->redraw_hud = true;
+			sfx_start((void *)sfx_get_item);
 			game_update_health_string();
 			break;
 
 		case ITEM_BOMB:
 			video_flash_border(TRIPLET_YELLOW);
 			++g_game.bombs;
+			sfx_start((void *)sfx_get_item);
 			game_update_hud_strings();
 			break;
 
@@ -1475,6 +1488,7 @@ static bool game_handle_tile_on_entry(
 			video_flash_border(TRIPLET_ORANGE);
 			game_maybe_hint(HINT_FOUND_ARTIFACT);
 			++g_game.artifacts;
+			sfx_start((void *)sfx_get_item);
 			game_update_hud_strings();
 			break;
 		}
@@ -1541,6 +1555,8 @@ void game_use_holy_water_bomb(events_t *events) {
 		if (m->active && m->screen == screen)
 			monster_kill(m, events);
 	}
+
+	sfx_start((void *)sfx_use_bomb);
 
 	/* 2. Destroy jars */
 	game_destroy_all_jars_on_screen(screen, events);

@@ -37,7 +37,7 @@
 #include "dat/fonts.h"
 #include "dat/images.h"
 #include "dat/levels.h"
-#include "dat/music.h"
+#include "dat/sfx.h"
 #include "dat/strings.h"
 #include "dat/tiles.h"
 

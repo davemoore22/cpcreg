@@ -33,7 +33,7 @@
 #define MASK_TABLE_LOC 0x0200 /* 0x0100 bytes long */
 #define DISK_TABLE_LOC 0x0300 /* 0x0100 bytes long */
 #define CODE_START_LOC 0x0480 /* See build_config.mk */
-#define DATA_START_LOC 0x67A0 /* See build_config.mk */
+#define DATA_START_LOC 0x6500 /* See build_config.mk */
 #define VIDEO_MEM_START ((u8 *)0xC000)
 #define VIDEO_MEM_END ((void *)0xFFFF)
 #define VIDEO_MEM_SIZE ((u8)0x4000)
@@ -72,7 +72,7 @@
 
 #define WALKER_ANIM_RATE 2
 #define WALKER_TOP 40
-#define WALKER_BOTTOM 128
+#define WALKER_BOTTOM 136
 
 /* Menu Screens Layout */
 #define TITLE_Y 2

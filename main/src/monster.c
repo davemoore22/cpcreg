@@ -205,6 +205,9 @@ monster_t *monster_spawn(u8 type, u8 screen, u8 gx, u8 gy) {
 		GAME_WINDOW_Y + m->byte_y);
 
 	monmap_set(gx, gy, type);
+
+	sfx_start((void *)sfx_spawn);
+
 	return m;
 }
 
@@ -628,6 +631,8 @@ void monster_kill(monster_t *m, events_t *events) {
 
 	g_game.score += 250;
 	m->active = 0;
+
+	sfx_start((void *)sfx_splat);
 }
 
 static u8 monster_any_sarcophagus(u8 screen) {

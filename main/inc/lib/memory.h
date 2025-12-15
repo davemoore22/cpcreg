@@ -38,3 +38,7 @@ extern void asm_load_file(
 #endif
 extern void asm_fdc_off(void);
 extern void asm_fdc_on(void);
+
+extern void sfx_start(void *table);
+extern void sfx_update(void);
+extern void sfx_stop(void);

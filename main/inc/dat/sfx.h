@@ -19,3 +19,12 @@
 #pragma once
 
 #include "main.h"
+
+extern const unsigned char sfx_footstep[];
+extern const unsigned char sfx_get_item[];
+extern const unsigned char sfx_spawn[];
+extern const unsigned char sfx_show_hint[];
+extern const unsigned char sfx_open_door[];
+extern const unsigned char sfx_use_bomb[];
+extern const unsigned char sfx_splat[];
+extern const unsigned char sfx_shoot[];
