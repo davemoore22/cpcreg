@@ -60,6 +60,7 @@ void monster_despawn_offscreen(void);
 void monster_player_collisions(events_t *events);
 monster_t *monster_find_at(u8 screen, u8 gx, u8 gy);
 void monster_kill(monster_t *m, events_t *events);
+void monster_take_damage(monster_t *m, u8 dmg, events_t *events);
 
 u16 monmap_idx(u8 gx, u8 gy);
 u8 monmap_get(u8 gx, u8 gy);

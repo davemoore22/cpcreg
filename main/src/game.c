@@ -241,7 +241,7 @@ void game_interrupt(void) {
 	if (g_int_idx == 4)
 		utils_wait(54);
 
-	if (v_int_idx == 2 && (g_options & OPT_SFX))
+	if (g_int_idx == 2 && (g_options & OPT_SFX))
 		sfx_update();
 
 	if (g_options & OPT_GREEN_SCREEN)
@@ -554,6 +554,7 @@ static void game_do_player_move(i8 dx, i8 dy, dir_t dir, events_t *events) {
 	/* Movement event (logical move has happened) */
 	events->moved = true;
 
+	sfx_stop();
 	sfx_start((void *)sfx_footstep);
 }
 
@@ -859,6 +860,7 @@ static void game_show_hint(const u8 idx) {
 
 	video_draw_hint(idx);
 
+	sfx_stop();
 	sfx_start((void *)sfx_show_hint);
 
 	utils_reset_clock();
@@ -937,12 +939,14 @@ static void game_open_door(const i8 dx, const i8 dy) {
 
 	if (IS_HDOOR(tile)) {
 		game_open_horizontal_door(new_x, new_y);
+		sfx_stop();
 		sfx_start((void *)sfx_open_door);
 		return;
 	}
 
 	if (IS_VDOOR(tile)) {
 		game_open_vertical_door(new_x, new_y);
+		sfx_stop();
 		sfx_start((void *)sfx_open_door);
 		return;
 	}
@@ -1099,6 +1103,7 @@ static void game_fire_bullet(void) {
 		GAME_WINDOW_X + g_bullet.byte_x,
 		GAME_WINDOW_Y + g_bullet.byte_y);
 
+	sfx_stop();
 	sfx_start((void *)sfx_shoot);
 }
 
@@ -1212,7 +1217,7 @@ static void game_step_bullet(events_t *events) {
 				g_bullet.grid_x, g_bullet.grid_y);
 
 			if (m) {
-				monster_kill(m, events);
+				monster_take_damage(m, 1, events);
 
 				g_bullet.active = false;
 				return;
@@ -1461,6 +1466,7 @@ static bool game_handle_tile_on_entry(
 			video_flash_border(TRIPLET_MAGENTA);
 			game_maybe_hint(HINT_FOUND_KEY);
 			++g_game.keys;
+			sfx_stop();
 			sfx_start((void *)sfx_get_item);
 			game_update_hud_strings();
 			break;
@@ -1473,6 +1479,7 @@ static bool game_handle_tile_on_entry(
 				g_game.health = 2000;
 			events->health_updated = true;
 			events->redraw_hud = true;
+			sfx_stop();
 			sfx_start((void *)sfx_get_item);
 			game_update_health_string();
 			break;
@@ -1480,6 +1487,7 @@ static bool game_handle_tile_on_entry(
 		case ITEM_BOMB:
 			video_flash_border(TRIPLET_YELLOW);
 			++g_game.bombs;
+			sfx_stop();
 			sfx_start((void *)sfx_get_item);
 			game_update_hud_strings();
 			break;
@@ -1556,6 +1564,7 @@ void game_use_holy_water_bomb(events_t *events) {
 			monster_kill(m, events);
 	}
 
+	sfx_stop();
 	sfx_start((void *)sfx_use_bomb);
 
 	/* 2. Destroy jars */

@@ -86,7 +86,7 @@ void menu_draw_centre(void) {
 		g_strings[PUBLISHED_TEXT], (ABOUT_Y + 1) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_2;
-	video_print_centred_text("v1.0.3", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
+	video_print_centred_text("v1.1.0", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_1;
 }
@@ -112,7 +112,7 @@ void menu_interrupt(void) {
 	if (v_int_idx == 0 && m_toggle_cooldown > 0)
 		--m_toggle_cooldown;
 
-	if (v_int_idx == 4 && g_options & OPT_SFX)
+	if (v_int_idx == 4 && (g_options & OPT_SFX))
 		sfx_update();
 
 	if (++v_int_idx == 6)

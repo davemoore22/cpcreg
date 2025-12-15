@@ -31,6 +31,12 @@ u8 g_ghost_spawn_timer;
 const i8 mon_step_bx[4] = {0, 0, 2, -2};
 const i8 mon_step_by[4] = {-8, 8, 0, 0};
 
+const u8 monster_base_hp[] = {
+	[MON_BAT] = 1,
+	[MON_ZOMBIE] = 2,
+	[MON_GHOST] = 3,
+};
+
 static dir_t monster_pick_move_dir(monster_t *m);
 static bool monster_can_enter_tile(monster_t *m, u8 gx, u8 gy);
 static void monster_start_move(monster_t *m, dir_t dir);
@@ -103,6 +109,7 @@ void monster_init_all(void) {
 
 		m->despawn_timer = 0;
 		m->v_pos = 0;
+		m->hp = 0;
 	}
 
 	/* Spawn timers start maxed so no instant spawns */
@@ -190,6 +197,8 @@ monster_t *monster_spawn(u8 type, u8 screen, u8 gx, u8 gy) {
 	m->anim_frame = 0;
 	m->anim_counter = 0;
 
+	m->hp = monster_base_hp[m->type];
+
 	/* Speed settings */
 	if (type == MON_BAT)
 		m->speed_delay = 30;
@@ -206,6 +215,7 @@ monster_t *monster_spawn(u8 type, u8 screen, u8 gx, u8 gy) {
 
 	monmap_set(gx, gy, type);
 
+	sfx_stop();
 	sfx_start((void *)sfx_spawn);
 
 	return m;
@@ -632,6 +642,7 @@ void monster_kill(monster_t *m, events_t *events) {
 	g_game.score += 250;
 	m->active = 0;
 
+	sfx_stop();
 	sfx_start((void *)sfx_splat);
 }
 
@@ -652,4 +663,14 @@ static u8 monster_any_sarcophagus(u8 screen) {
 static dir_t monster_random_dir(void) {
 
 	return (dir_t)(cpct_getRandom_lcg_u8(0) & 3);
+}
+
+void monster_take_damage(monster_t *m, u8 dmg, events_t *events) {
+
+	if (m->hp > dmg)
+		m->hp -= dmg;
+	else {
+		m->hp = 0;
+		monster_kill(m, events);
+	}
 }

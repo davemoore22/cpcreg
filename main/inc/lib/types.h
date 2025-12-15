@@ -217,6 +217,8 @@ typedef struct {
 		/* vram pointer for drawing */
 		u8 *v_pos;
 
+		u8 hp;
+
 } monster_t;
 
 typedef struct {
