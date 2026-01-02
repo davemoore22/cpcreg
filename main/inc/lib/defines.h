@@ -269,7 +269,7 @@
 
 /* Hints Text */
 #define HINT_TEXT_START 50
-#define HINT_DURATION 3
+#define HINT_DURATION 4
 #define FRAME_V_OFFSET -12
 #define HINT_FRAME_WIDTH 14
 #define HINT_FRAME_HEIGHT 6

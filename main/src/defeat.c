@@ -48,7 +48,7 @@ void defeat_start(void) {
 	cpct_setInterruptHandler(defeat_interrupt);
 
 	/* Start Clock */
-	duration = 5;
+	duration = 10;
 	g_clock_on = true;
 
 	utils_clear_input();

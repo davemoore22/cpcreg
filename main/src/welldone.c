@@ -48,7 +48,7 @@ void welldone_start(void) {
 	cpct_setInterruptHandler(welldone_interrupt);
 
 	/* Start Clock */
-	duration = 5;
+	duration = 10;
 	g_clock_on = true;
 
 	utils_clear_input();

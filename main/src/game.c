@@ -1,6 +1,6 @@
 /*
  * Reginald and the She Vampires for the Amstrad CPC
- * Copyright (C) 2025 Dave Moore
+ * Copyright (C) 2026 Dave Moore
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -867,7 +867,7 @@ static void game_show_hint(const u8 idx) {
 	g_clock_on = true;
 
 	/* Display for a number of seconds or until a keypress */
-	while ((!kp) && (g_clock.s < HINT_DURATION)) {
+	while (g_clock.s < HINT_DURATION) {
 
 		/* Check for a keypress */
 		kp = cpct_isAnyKeyPressed();
@@ -1404,7 +1404,7 @@ static bool game_handle_tile_on_entry(
 		game_maybe_hint(HINT_BUMP_JAR);
 
 		/* Apply damage */
-		game_take_damage(50);
+		game_take_damage(100);
 		g_game.score += 50;
 		game_update_health_string();
 		events->health_updated = true;

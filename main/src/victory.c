@@ -97,7 +97,7 @@ static void victory_wait_or_kp(void) {
 	utils_reset_clock();
 
 	/* Start Clock */
-	u16 duration = 10;
+	u16 duration = 20;
 	g_clock_on = true;
 
 	utils_clear_input();

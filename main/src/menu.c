@@ -87,7 +87,7 @@ void menu_draw_centre(void) {
 		g_strings[PUBLISHED_TEXT], (ABOUT_Y + 1) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_2;
-	video_print_centred_text("v1.1.0", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
+	video_print_centred_text("v1.1.1", (ABOUT_Y + 2) << LINE_P_H_SHIFT);
 
 	v_pen = PEN_1;
 }

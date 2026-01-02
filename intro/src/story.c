@@ -1,6 +1,6 @@
 /*
  * Reginald and the She Vampires for the Amstrad CPC
- * Copyright (C) 2026 Dave Moore
+ * Copyright (C) 2026 davy moore
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ void story_start(void) {
   cpct_setInterruptHandler(story_interrupt);
 
   /* Start Clock */
-  duration = 9;
+  duration = 15;
   g_clock_on = true;
 
   while (!kp) {

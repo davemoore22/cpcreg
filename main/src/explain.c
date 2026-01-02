@@ -46,7 +46,7 @@ void explain_start(void) {
 	cpct_setInterruptHandler(explain_interrupt);
 
 	/* Start Clock */
-	u16 duration = 30;
+	u16 duration = 60;
 	g_clock_on = true;
 
 	utils_clear_input();

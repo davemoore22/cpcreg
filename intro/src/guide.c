@@ -1,6 +1,6 @@
 /*
  * Reginald and the She Vampires for the Amstrad CPC
- * Copyright (C) 2026 Dave Moore
+ * Copyright (C) 2026 davy moore
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,13 +47,14 @@ void guide_start(void) {
   cpct_setInterruptHandler(utils_clock_interrupt);
 
   /* Start Clock */
-  duration = 10;
+  duration = 30;
   g_clock_on = true;
 
   /* Display for a number of seconds or until a keypress */
   while ((!kp) && (g_clock.s < duration)) {
 
     /* Check for a keypress */
+    cpct_scanKeyboard();
     kp = cpct_isAnyKeyPressed();
   }
 

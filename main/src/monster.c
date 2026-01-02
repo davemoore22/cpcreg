@@ -596,11 +596,11 @@ void monster_player_collisions(events_t *events) {
 			m->grid_y == (u8)g_player.grid_y) {
 
 			if (m->type == MON_BAT)
-				game_take_damage(100);
+				game_take_damage(150);
 			else if (m->type == MON_ZOMBIE)
-				game_take_damage(200);
+				game_take_damage(250);
 			else if (m->type == MON_GHOST)
-				game_take_damage(300);
+				game_take_damage(350);
 			game_update_health_string();
 			events->health_updated = true;
 			events->redraw_hud = true;

@@ -1,6 +1,6 @@
 /*
  * Reginald and the She Vampires for the Amstrad CPC
- * Copyright (C) 2026 Dave Moore
+ * Copyright (C) 2026 davy moore
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ const char *const g_strings[] = {
 
     /* Title Screen Scroller */
     "                             REGINALD AND THE SHE VAMPIRES "
-    "(C) DAVE MOORE 2026. PUBLISHED BY "
-    "TYPHONSOFT (TYPHONSOFT.ITCH.IO). CODE AND GFX BY DAVE MOORE. "
+    "(C) DAVY MOORE 2026. PUBLISHED BY "
+    "TYPHONSOFT (TYPHONSOFT.ITCH.IO). CODE AND GFX BY DAVY MOORE. "
     "MUSIC BY FENYX KELL. BASED UPON MR WEEMS AND THE SHE-"
     "VAMPIRES BY SIMON DUNSTAN, (C) PIRANHA 1987. PRESS ANY KEY TO "
     "CONTINUE...                             "};

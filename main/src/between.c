@@ -45,7 +45,7 @@ void between_start(void) {
 	cpct_setInterruptHandler(between_interrupt);
 
 	/* Start Clock */
-	u16 duration = 5;
+	u16 duration = 10;
 	g_clock_on = true;
 
 	utils_clear_input();
